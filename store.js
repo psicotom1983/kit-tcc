@@ -150,8 +150,9 @@ const Folder = {
 
 /* ----------------------------- Google Drive (login com Google) ----------------------------- */
 const GDrive = {
-  token: null, exp: 0, folderId: null, vaultId: null, email: "",
-  clientId() { return lsGet("kitTCC.gClientId") || ""; },
+  token: null, exp: 0, folderId: null, vaultId: null, email: "", triedSilent: false,
+  // Client ID é público (não é segredo); o campo nas Configurações pode sobrescrever
+  clientId() { return lsGet("kitTCC.gClientId") || "673208952779-r4t755nhh161ij1kvjjkermpj2i93t6e.apps.googleusercontent.com"; },
   originOk() { return location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1"; },
   live() { return !!this.token && Date.now() < this.exp; },
   async loadGis() {
@@ -164,13 +165,17 @@ const GDrive = {
     await this.loadGis();
     await new Promise((res, rej) => {
       const tc = google.accounts.oauth2.initTokenClient({
-        client_id: this.clientId(), scope: "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email",
-        callback: r => { if (r.error) return rej(new Error(r.error)); this.token = r.access_token; this.exp = Date.now() + (Number(r.expires_in) - 60) * 1000; res(); },
+        client_id: this.clientId(), scope: "https://www.googleapis.com/auth/drive.file",
+        callback: r => { if (r.error) return rej(new Error(r.error)); this.token = r.access_token; this.exp = Date.now() + (Number(r.expires_in) - 60) * 1000; this.triedSilent = false; res(); },
         error_callback: e => rej(new Error(e && e.type === "popup_closed" ? "janela do Google fechada" : (e && e.type) || "login cancelado"))
       });
       tc.requestAccessToken({ prompt: "" });
     });
-    try { const r = await this.api("https://www.googleapis.com/oauth2/v3/userinfo"); this.email = (await r.json()).email || ""; } catch (e) {}
+  },
+  /* token expirado: tenta renovar sem perguntar nada, uma vez por desconexão (evita abrir janelas a cada salvamento) */
+  async renew() {
+    if (this.live()) return true; if (this.triedSilent) return false; this.triedSilent = true;
+    try { await this.login(); return true; } catch (e) { return false; }
   },
   logout() { if (this.token && window.google) try { google.accounts.oauth2.revoke(this.token); } catch (e) {} this.token = null; this.exp = 0; this.folderId = null; this.vaultId = null; this.email = ""; },
   async api(url, opt = {}) {
@@ -186,7 +191,7 @@ const GDrive = {
     if (this.folderId) return this.folderId;
     const f = await this.find("appProperties has { key='kitTCC' and value='folder' }");
     if (f.length) return this.folderId = f[0].id;
-    const r = await this.api("https://www.googleapis.com/drive/v3/files", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: "Kit Clínico TCC", mimeType: "application/vnd.google-apps.folder", appProperties: { kitTCC: "folder" } }) });
+    const r = await this.api("https://www.googleapis.com/drive/v3/files", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: "Kit TCC - Backups", mimeType: "application/vnd.google-apps.folder", appProperties: { kitTCC: "folder" } }) });
     return this.folderId = (await r.json()).id;
   },
   multipart(meta, data, type) {

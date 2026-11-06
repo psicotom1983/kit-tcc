@@ -42,6 +42,14 @@ Todos os pedidos feitos até agora, com a situação de cada um.
 - ⏳ Avisos por **WhatsApp** (precisa de serviço pago, ex.: API oficial do WhatsApp Business/Twilio)
 - ⏳ **Alarme escalonado nativo** no celular mesmo com o kit fechado (exige versão aplicativo/APK)
 
+## Pedidos de 06/11/2026 (noite) — Google para usuários leigos
+- 🧪 Client ID do Google já embutido (campo nas Configurações continua, já preenchido)
+- 🧪 Login com Google só com permissão `drive.file` (o kit só enxerga os arquivos que ele mesmo criou)
+- 🧪 Botão “☁ Entrar com Google” na primeira abertura e em ⚙ Configurações › Drive; ao criar a senha depois de entrar, o backup no Drive já liga sozinho
+- 🧪 Backup automático na pasta **“Kit TCC - Backups”** (cofre .tcc criptografado + cópia diária + anexos)
+- 🧪 Sessão do Google expirada: renova em silêncio; se não der, faixa fina **“↻ Reconectar Google”** (1 toque); nada se perde, tudo continua salvo no aparelho
+- 🧪 Publicado em https://psicotom1983.github.io/kit-tcc/
+
 ## Ideias para depois
 - ⏳ Área do paciente (fichas preenchidas entre sessões)
 - ⏳ Transcrição de gravações já feitas (sem ser ao vivo)

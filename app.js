@@ -89,7 +89,7 @@ async function syncExternal() {
       } catch (e) { SYNC.pasta = { st: "err", t: SYNC.pasta.t, msg: e.message }; }
     } else SYNC.pasta = { st: "off", t: 0 };
     if (DB.config.driveOn) {
-      if (!GDrive.live()) SYNC.drive = { st: "disc", t: SYNC.drive.t, msg: "toque para reconectar ao Google" };
+      if (!GDrive.live() && !(await GDrive.renew())) SYNC.drive = { st: "disc", t: SYNC.drive.t, msg: "toque para reconectar ao Google" };
       else {
         try {
           SYNC.drive.st = "pend"; renderFlag();
@@ -120,7 +120,7 @@ function flagState() {
   if (SYNC.pasta.st === "ok") return ["ok", "✓", "Salvo na pasta " + hhmm(SYNC.pasta.t)];
   return ["warn", "✓", "Salvo só neste aparelho"];
 }
-function renderFlag() { const el = $("#flag"); if (!el) return; const f = flagState(); if (!f) return; el.className = "flag " + f[0]; el.innerHTML = `<span class="fi">${f[1]}</span><span class="ft">${esc(f[2])}</span>`; }
+function renderFlag() { const el = $("#flag"); if (!el) return; const f = flagState(); if (!f) return; el.className = "flag " + f[0]; el.innerHTML = `<span class="fi">${f[1]}</span><span class="ft">${esc(f[2])}</span>`; const b = $("#gBanner"); if (b) b.hidden = !(DB.config.driveOn && SYNC.drive.st === "disc"); }
 
 /* confirmação dupla para excluir: duas janelas em posições diferentes, com o botão de excluir trocando de lado */
 function ask(msg, okLabel, pos, okLeft) {
@@ -177,7 +177,7 @@ function render() {
     <button class="btn sm" data-act="iaToggle" title="Assistente de IA">🤖<span class="bt"> IA</span></button>
     <button class="btn sm" data-act="nav" data-v="config" title="Configurações" aria-label="Configurações">⚙</button>
     <button class="btn sm" data-act="lock" title="Bloquear">🔒</button></header>
-  ${DB.config.driveOn && SYNC.drive.st === "disc" ? `<div class="banner bad">⚠ As alterações estão salvas neste aparelho, mas <b>não estão indo para o Google Drive</b>. <button class="btn sm" data-act="gConnect">Reconectar Google</button></div>` : ""}
+  <button id="gBanner" class="banner bad" data-act="gConnect" title="Tudo continua salvo neste aparelho" hidden>↻ Reconectar Google</button>
   <div class="wrap"><nav>${nav.map(([id, t]) => `<button class="${cur === id ? "on" : ""}" data-act="nav" data-v="${id}">${t}</button>`).join("")}</nav>
   <main>${page()}</main></div>
   <button class="fab" data-act="saveNow" title="Salvar agora (Ctrl+S) — o kit também salva sozinho">💾 Salvar</button>`;
@@ -225,7 +225,7 @@ function lockScreen() {
   ${LOCK_MSG ? `<div class="alert info">${LOCK_MSG}</div>` : ""}
   ${form}<p class="err" id="err"></p>
   <hr>
-  <button class="btn big" data-act="gLoginLock" ${g ? "" : "disabled"}>☁ Entrar com Google (abrir do Drive)</button>
+  ${GDrive.live() ? `<p class="ref" style="text-align:center">☁ Google conectado</p>` : `<button class="btn big" data-act="gLoginLock" ${g ? "" : "disabled"}>☁ Entrar com Google</button>`}
   ${g ? "" : `<p class="ref" style="margin:4px 0 0">O login com Google precisa ser configurado uma vez (⚙ Configurações). <a href="#" data-act="gCfgLock">Configurar agora</a></p>`}
   <button class="btn big" data-act="openFile" style="margin-top:8px">📂 Abrir arquivo / backup (.tcc)</button>
   <p class="ref" style="margin-top:14px">Esqueceu a senha? Use o código de recuperação. Sem senha <i>e</i> sem código, ninguém consegue ler os dados — nem você.</p>
@@ -257,6 +257,7 @@ async function doCreate() {
   err("Criando…");
   const code = await Vault.create(a);
   DB = { app: "kit-tcc", v: 2, created: nowISO(), pacientes: [] }; normDB();
+  if (GDrive.live()) { DB.config.driveOn = true; SYNC.drive.st = "pend"; } // entrou com Google antes de criar a senha
   await save(); render(); resetIdle(); showRecovery(code, true);
 }
 async function doRecover() {
@@ -340,7 +341,8 @@ async function gConnect() {
 async function gLoginLock() {
   try {
     err("Conectando ao Google…"); await GDrive.login();
-    const rem = await GDrive.remoteVault(); if (!rem) return err("Nenhum cofre do kit encontrado nesse Google Drive. Crie um cofre e conecte o Drive em Dados e backup.");
+    const rem = await GDrive.remoteVault();
+    if (!rem) { LOCK_MODE = VAULT_BLOB ? "senha" : "criar"; LOCK_MSG = VAULT_BLOB ? "✓ Conectado ao Google. Digite sua senha — o backup no Drive fica automático." : "✓ Conectado ao Google. Agora crie sua senha — o backup no Drive (pasta “Kit TCC - Backups”) fica automático."; return render(); }
     const blob = await GDrive.download(rem.id, true), cur = await Store.loadVault();
     if (cur && cur !== blob) await Store.snap(cur, true, "antes de baixar do Drive");
     await IDB.put("kv", "vault", blob); VAULT_BLOB = blob; LOCK_MODE = "senha";
@@ -935,11 +937,11 @@ function pgConfig() {
   const cfg = DB.config, ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
   return `<h1>⚙ Configurações</h1>
   <div class="card"><h3>☁ Google Drive — salvar tudo online (recomendado)</h3>
-    <p style="margin-top:0">Cada alteração e cada anexo vão direto para uma pasta <b>“Kit Clínico TCC”</b> no seu Drive, criptografados. O Drive guarda também uma cópia por dia (histórico). Em outro aparelho, use “Entrar com Google” na tela de bloqueio.</p>
+    <p style="margin-top:0">Cada alteração e cada anexo vão direto para a pasta <b>“Kit TCC - Backups”</b> no seu Drive, criptografados. O Drive guarda também uma cópia por dia (histórico). Em outro aparelho, use “Entrar com Google” na tela de bloqueio.</p>
     ${!GDrive.originOk() ? `<div class="alert warn">O login com Google só funciona com o kit aberto por um endereço <b>https</b> (por exemplo, publicado no GitHub Pages). Aberto como arquivo, use a <b>pasta vinculada</b> abaixo.</div>` : ""}
-    <label class="f"><span>Client ID do Google (configuração única)</span><input id="gcid" value="${esc(GDrive.clientId())}" placeholder="xxxxxxxx.apps.googleusercontent.com"><small>Criado no Google Cloud Console → APIs e serviços → Credenciais → ID do cliente OAuth (aplicativo da Web), com a origem <code>${esc(location.origin)}</code> autorizada e a Google Drive API ativada.</small></label>
+    <label class="f"><span>Client ID do Google (já vem preenchido — não precisa mexer)</span><input id="gcid" value="${esc(GDrive.clientId())}" placeholder="xxxxxxxx.apps.googleusercontent.com"><small>Criado no Google Cloud Console → APIs e serviços → Credenciais → ID do cliente OAuth (aplicativo da Web), com a origem <code>${esc(location.origin)}</code> autorizada e a Google Drive API ativada.</small></label>
     <div class="row"><button class="btn" data-act="gSaveCid">Salvar Client ID</button>
-    ${cfg.driveOn ? (GDrive.live() ? `<span class="badge ok">conectado${GDrive.email ? " · " + esc(GDrive.email) : ""}</span><button class="btn" data-act="gPullAll">⬇ Baixar todos os anexos para este aparelho</button><button class="btn del" data-act="gOff">Desligar sincronização</button>` : `<button class="btn pri" data-act="gConnect">Reconectar Google</button><button class="btn del" data-act="gOff">Desligar</button>`) : `<button class="btn pri" data-act="gConnect" ${GDrive.clientId() && GDrive.originOk() ? "" : "disabled"}>Conectar Google Drive</button>`}</div></div>
+    ${cfg.driveOn ? (GDrive.live() ? `<span class="badge ok">conectado${GDrive.email ? " · " + esc(GDrive.email) : ""}</span><button class="btn" data-act="gPullAll">⬇ Baixar todos os anexos para este aparelho</button><button class="btn del" data-act="gOff">Desligar sincronização</button>` : `<button class="btn pri" data-act="gConnect">Reconectar Google</button><button class="btn del" data-act="gOff">Desligar</button>`) : `<button class="btn pri" data-act="gConnect" ${GDrive.clientId() && GDrive.originOk() ? "" : "disabled"}>☁ Entrar com Google</button>`}</div></div>
 
   <div class="card"><h3>📁 Pasta vinculada (computador)</h3>
     ${Folder.supported() ? `<p style="margin-top:0">Escolha uma pasta — por exemplo dentro do <b>Google Drive para computador</b> ou do OneDrive. O kit grava ali o cofre, os anexos e uma cópia por dia.</p>

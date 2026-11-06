@@ -32,8 +32,8 @@ Um app (HTML instalável no celular, PWA) que funciona como prontuário de apoio
 - Uso principalmente no celular.
 
 ## Pendências (dependem de mim)
-- Publicar o kit num endereço https (GitHub Pages) para usar no celular e com login Google.
-- Criar o Client ID do Google e a chave da API da Anthropic.
+- Testar o login com Google no celular em https://psicotom1983.github.io/kit-tcc/ (o Client ID já vem embutido; backups vão para a pasta “Kit TCC - Backups”).
+- Criar a chave da API da Anthropic.
 
 ## Ideias futuras
 - Avisos por e-mail ou WhatsApp com o kit fechado.
