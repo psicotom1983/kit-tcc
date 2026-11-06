@@ -1,0 +1,16 @@
+{
+  "name": "Kit Clínico TCC",
+  "short_name": "Kit TCC",
+  "description": "Prontuário de apoio em TCC com direcionamento clínico, criptografado.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f6f5f2",
+  "theme_color": "#2f6f6a",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
