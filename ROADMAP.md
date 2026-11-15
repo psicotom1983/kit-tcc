@@ -50,6 +50,11 @@ Todos os pedidos feitos até agora, com a situação de cada um.
 - 🧪 Sessão do Google expirada: renova em silêncio; se não der, faixa fina **“↻ Reconectar Google”** (1 toque); nada se perde, tudo continua salvo no aparelho
 - 🧪 Publicado em https://psicotom1983.github.io/kit-tcc/
 
+## Pedidos de 15/11/2026
+- 🧪 Segurança: senha protegida com **600 mil** repetições (PBKDF2) nos cofres novos; arquivos e backups antigos continuam abrindo
+- 🧪 Celular: menu principal virou **barra fixa embaixo** (ícone + nome curto), ao alcance do polegar; ⚙ fica só no topo
+- 🧪 Celular: abas do paciente rolam para o lado e a aba aberta aparece sozinha; botão Salvar subiu para não cobrir o menu
+
 ## Ideias para depois
 - ⏳ Área do paciente (fichas preenchidas entre sessões)
 - ⏳ Transcrição de gravações já feitas (sem ser ao vivo)

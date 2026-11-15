@@ -178,11 +178,13 @@ function render() {
     <button class="btn sm" data-act="nav" data-v="config" title="Configurações" aria-label="Configurações">⚙</button>
     <button class="btn sm" data-act="lock" title="Bloquear">🔒</button></header>
   <button id="gBanner" class="banner bad" data-act="gConnect" title="Tudo continua salvo neste aparelho" hidden>↻ Reconectar Google</button>
-  <div class="wrap"><nav>${nav.map(([id, t]) => `<button class="${cur === id ? "on" : ""}" data-act="nav" data-v="${id}">${t}</button>`).join("")}</nav>
+  <div class="wrap"><nav>${nav.map(([id, t]) => `<button class="${cur === id ? "on" : ""}" data-act="nav" data-v="${id}">${t.replace(/^(\S+) (\S+)(.*)$/, '<i class="ni">$1</i> $2<span class="nr">$3</span>')}</button>`).join("")}</nav>
   <main>${page()}</main></div>
   <button class="fab" data-act="saveNow" title="Salvar agora (Ctrl+S) — o kit também salva sozinho">💾 Salvar</button>`;
   renderFlag(); renderRecBar();
   if (IA.open) iaRender();
+  /* celular: mostra a aba/menu ativo (as barras rolam para o lado) */
+  document.querySelectorAll("nav button.on, .tabs button.on").forEach(b => b.scrollIntoView({ inline: "center", block: "nearest" }));
   window.scrollTo(0, keep ? y : 0);
 }
 function page() {

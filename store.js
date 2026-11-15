@@ -14,10 +14,10 @@ const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return 
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } };
 
 /* ----------------------------- criptografia ----------------------------- */
-const ITER = 310000;
-async function kek(secret, salt) {
+const ITER = 600000, ITER_OLD = 310000; /* arquivos antigos (sem "it") usam ITER_OLD */
+async function kek(secret, salt, it = ITER) {
   const base = await crypto.subtle.importKey("raw", te.encode(secret), "PBKDF2", false, ["deriveKey"]);
-  return crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: ITER, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+  return crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: it, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
 }
 async function aesEnc(key, bytes) { const iv = crypto.getRandomValues(new Uint8Array(12)); const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, bytes); return { iv, data: ct }; }
 const aesDec = (key, iv, ct) => crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ct);
@@ -32,10 +32,10 @@ const Vault = {
   async wrap(secret) {
     const salt = crypto.getRandomValues(new Uint8Array(16)), k = await kek(secret, salt);
     const raw = await crypto.subtle.exportKey("raw", this.DEK), e = await aesEnc(k, raw);
-    return { salt: b64(salt), iv: b64(e.iv), ct: b64(e.data) };
+    return { salt: b64(salt), it: ITER, iv: b64(e.iv), ct: b64(e.data) };
   },
   async unwrap(w, secret) {
-    const k = await kek(secret, ub64(w.salt)), raw = await aesDec(k, ub64(w.iv), ub64(w.ct));
+    const k = await kek(secret, ub64(w.salt), w.it || ITER_OLD), raw = await aesDec(k, ub64(w.iv), ub64(w.ct));
     return crypto.subtle.importKey("raw", raw, "AES-GCM", true, ["encrypt", "decrypt"]);
   },
   async create(pw) {
@@ -53,7 +53,7 @@ const Vault = {
     const o = JSON.parse(blob); if (o.app !== "kit-tcc") throw new Error("arquivo inválido");
     if (!o.v || o.v === 1) {
       if (via !== "pw") throw new Error("Este cofre é da versão 1 e ainda não tem código de recuperação — use a senha.");
-      const key = await kek(secret, ub64(o.salt)), pt = await aesDec(key, ub64(o.iv), ub64(o.data));
+      const key = await kek(secret, ub64(o.salt), ITER_OLD), pt = await aesDec(key, ub64(o.iv), ub64(o.data));
       return { db: JSON.parse(td.decode(pt)), legacy: true };
     }
     const dek = await this.unwrap(via === "rec" ? o.rec : o.pw, via === "rec" ? normCode(secret) : secret);
