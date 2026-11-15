@@ -7,6 +7,7 @@ const APP_VER = "2.0";
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const nl = s => esc(s).replace(/\n/g, "<br>");
+const VERSAO = "2.6 · 15/11/2026"; /* mude a cada atualização (e o CACHE do sw.js) */
 const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4);
 const today = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
 const fmt = d => d ? String(d).slice(0, 10).split("-").reverse().join("/") : "—";
@@ -234,6 +235,7 @@ function lockScreen() {
   ${g ? "" : `<p class="ref" style="margin:4px 0 0">O login com Google precisa ser configurado uma vez (⚙ Configurações). <a href="#" data-act="gCfgLock">Configurar agora</a></p>`}
   <button class="btn big" data-act="openFile" style="margin-top:8px">📂 Abrir arquivo / backup (.tcc)</button>
   <button class="btn big" data-a11y="open" style="margin-top:8px">Aa Acessibilidade e temas</button>
+  <p class="ref" style="text-align:center;margin-top:10px">Versão ${VERSAO}</p>
   <p class="ref" style="margin-top:14px">Esqueceu a senha? Use o código de recuperação. Sem senha <i>e</i> sem código, ninguém consegue ler os dados — nem você.</p>
   <p class="ref">v${APP_VER}</p></div></div>`;
 }
@@ -941,7 +943,7 @@ function pgDados() {
 }
 function pgConfig() {
   const cfg = DB.config, ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
-  return `<h1>⚙ Configurações</h1>
+  return `<h1>⚙ Configurações</h1><p class="ref" style="margin-top:-6px">Versão ${VERSAO}</p>
   <div class="card"><h3>☁ Google Drive — salvar tudo online (recomendado)</h3>
     <p style="margin-top:0">Cada alteração e cada anexo vão direto para a pasta <b>“Kit TCC - Backups”</b> no seu Drive, criptografados. O Drive guarda também uma cópia por dia (histórico). Em outro aparelho, use “Entrar com Google” na tela de bloqueio.</p>
     ${!GDrive.originOk() ? `<div class="alert warn">O login com Google só funciona com o kit aberto por um endereço <b>https</b> (por exemplo, publicado no GitHub Pages). Aberto como arquivo, use a <b>pasta vinculada</b> abaixo.</div>` : ""}
