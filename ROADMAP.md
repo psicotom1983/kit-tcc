@@ -54,6 +54,10 @@ Todos os pedidos feitos até agora, com a situação de cada um.
 - 🧪 Segurança: senha protegida com **600 mil** repetições (PBKDF2) nos cofres novos; arquivos e backups antigos continuam abrindo
 - 🧪 Celular: menu principal virou **barra fixa embaixo** (ícone + nome curto), ao alcance do polegar; ⚙ fica só no topo
 - 🧪 Celular: abas do paciente rolam para o lado e a aba aberta aparece sozinha; botão Salvar subiu para não cobrir o menu
+- 🧪 Temas: 16 temas (Consultório claro/escuro, Painel de BI, 51 tons de cinza, Colorido, Psicologia, Neurociência, TCC, Psicanálise, Jung, Comportamental, Humanista, Gestalt, Sistêmica, ACT, DBT) + 12 campanhas do mês + "Tema do mês" automático
+- 🧪 Botão **Aa**: A− / A+ / Restaurar, alto contraste, ler botões em voz alta (também na tela de senha)
+- 🧪 📓 Caderno: anotações livres e notas de áudio (criptografadas, vão para o Drive, lixeira com restaurar)
+- 🧪 🎤 Ditado: botão de microfone em todos os campos de texto grandes (paciente, sessões, registros, caderno)
 
 ## Ideias para depois
 - ⏳ Área do paciente (fichas preenchidas entre sessões)

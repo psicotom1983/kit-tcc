@@ -53,6 +53,7 @@ function allDocs() {
   DB.pacientes.forEach(p => { p.docs.forEach(d => out.push(d)); p.lixeira.forEach(L => { if (L.from === "docs") out.push(L.item); }); });
   DB.lixeira.forEach(L => (L.item.docs || []).forEach(d => out.push(d)));
   DB.lixeira.forEach(L => (L.item.lixeira || []).forEach(X => { if (X.from === "docs") out.push(X.item); }));
+  const c = cadNorm(); c.docs.forEach(d => out.push(d)); c.lixeira.forEach(L => { if (L.tipo === "audio") out.push(L.item); });
   return out;
 }
 
@@ -169,11 +170,12 @@ function render() {
   const app = $("#app");
   if (!DB) { document.body.classList.remove("ia-open"); app.innerHTML = lockScreen(); setTimeout(() => $("#pw") && !isMobile() && $("#pw").focus(), 30); return; }
   const y = window.scrollY, keep = V._keepScroll; V._keepScroll = false;
-  const nav = [["pacientes", "👥 Pacientes"], ["agenda", "📅 Agenda"], ["protocolos", "🧭 Protocolos"], ["tecnicas", "🧰 Técnicas"], ["literatura", "📚 Literatura Científica"], ["etica", "⚖ Ética e CFP"], ["dados", "☁ Dados e backup"], ["config", "⚙ Configurações"]];
+  const nav = [["pacientes", "👥 Pacientes"], ["agenda", "📅 Agenda"], ["protocolos", "🧭 Protocolos"], ["tecnicas", "🧰 Técnicas"], ["caderno", "📓 Caderno"], ["literatura", "📚 Literatura Científica"], ["etica", "⚖ Ética e CFP"], ["dados", "☁ Dados e backup"], ["config", "⚙ Configurações"]];
   const cur = V.page === "paciente" ? "pacientes" : V.page;
   applyPrefs();
   app.innerHTML = `<header><span class="brand">🧠<span class="bt"> Kit Clínico TCC</span></span><span class="sp"></span>
     <button id="flag" class="flag" data-act="flag" title="Situação do salvamento — toque para detalhes"></button><span class="sp"></span>
+    <button class="btn sm" data-a11y="open" title="Acessibilidade e temas" aria-label="Acessibilidade e temas">Aa</button>
     <button class="btn sm" data-act="iaToggle" title="Assistente de IA">🤖<span class="bt"> IA</span></button>
     <button class="btn sm" data-act="nav" data-v="config" title="Configurações" aria-label="Configurações">⚙</button>
     <button class="btn sm" data-act="lock" title="Bloquear">🔒</button></header>
@@ -197,6 +199,7 @@ function page() {
     case "config": return pgConfig();
     case "agenda": return pgAgenda();
     case "literatura": return pgLiteratura();
+    case "caderno": return pgCaderno();
     default: return pgPacientes();
   }
 }
@@ -230,6 +233,7 @@ function lockScreen() {
   ${GDrive.live() ? `<p class="ref" style="text-align:center">☁ Google conectado</p>` : `<button class="btn big" data-act="gLoginLock" ${g ? "" : "disabled"}>☁ Entrar com Google</button>`}
   ${g ? "" : `<p class="ref" style="margin:4px 0 0">O login com Google precisa ser configurado uma vez (⚙ Configurações). <a href="#" data-act="gCfgLock">Configurar agora</a></p>`}
   <button class="btn big" data-act="openFile" style="margin-top:8px">📂 Abrir arquivo / backup (.tcc)</button>
+  <button class="btn big" data-a11y="open" style="margin-top:8px">Aa Acessibilidade e temas</button>
   <p class="ref" style="margin-top:14px">Esqueceu a senha? Use o código de recuperação. Sem senha <i>e</i> sem código, ninguém consegue ler os dados — nem você.</p>
   <p class="ref">v${APP_VER}</p></div></div>`;
 }
@@ -597,7 +601,7 @@ async function handleUpload(files) {
   await save(); V._keepScroll = true; render();
 }
 function setFlagMsg(m) { const el = $("#flag"); if (el) { el.className = "flag saving"; el.textContent = m; } }
-function findDoc(id) { for (const p of DB.pacientes) { const d = p.docs.find(x => x.id === id); if (d) return [p, d]; } return [null, null]; }
+function findDoc(id) { for (const p of [...DB.pacientes, cadNorm()]) { const d = p.docs.find(x => x.id === id); if (d) return [p, d]; } return [null, null]; }
 async function docVer(id) {
   const [, d] = findDoc(id); if (!d) return;
   const dlg = $("#dlg"); dlg.innerHTML = `<p>Abrindo ${esc(d.nome)}…</p>`; dlg.showModal();
@@ -965,7 +969,7 @@ function pgConfig() {
     <p class="ref">Instalado, o kit abre como app e funciona sem internet (a sincronização acontece quando a conexão voltar).</p></div>
 
   <div class="card"><h3>🎨 Aparência e uso</h3><div class="g3">
-    ${fld(cfg, "tema", "Tema", "select", { id: "cfgTema", options: [["", "Automático (do aparelho)"], ["light", "Claro"], ["dark", "Escuro"]] })}
+    ${fld(cfg, "tema", "Tema", "select", { id: "cfgTema", options: Temas.opcoes() })}
     ${fld(cfg, "fonte", "Tamanho do texto", "select", { id: "cfgFonte", options: [["", "Normal"], ["g", "Grande"], ["gg", "Maior"]] })}
     ${fld(cfg, "bloqueioMin", "Bloquear sozinho após", "select", { options: [["", "20 minutos (padrão)"], ["5", "5 minutos"], ["10", "10 minutos"], ["30", "30 minutos"], ["60", "1 hora"]] })}</div>
     ${fld(cfg, "supPadrao", "Supervisor(a) padrão para novos pacientes", "text")}
@@ -975,7 +979,7 @@ function pgConfig() {
 }
 function applyPrefs() {
   const c = (DB && DB.config) || {};
-  if (c.tema) document.documentElement.dataset.theme = c.tema; else delete document.documentElement.dataset.theme;
+  Temas.aplicar(c.tema || "");
   document.body.classList.toggle("fs-g", c.fonte === "g"); document.body.classList.toggle("fs-gg", c.fonte === "gg");
 }
 document.addEventListener("change", e => { if (["cfgTema", "cfgFonte"].includes(e.target.id)) applyPrefs(); });
