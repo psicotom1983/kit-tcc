@@ -2,7 +2,7 @@
    Kit Clínico TCC — APLICATIVO (v2)
    ===================================================================== */
 "use strict";
-const APP_VER = "2.6 (15/11/2026)"; /* mude a cada atualização, junto com o CACHE do sw.js */
+const APP_VER = "2.7 (18/11/2026)"; /* mude a cada atualização, junto com o CACHE do sw.js */
 /* ============================== utilidades ============================== */
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -718,13 +718,8 @@ function tabRegistros(p) {
   const dist = ["", ...DISTORCOES.map(d => d[0])];
   return `<h2 style="margin-top:0">RPD — Registro de Pensamentos</h2>
   <div class="row" style="margin-bottom:10px"><button class="btn pri sm" data-act="newRPD">+ Novo registro</button><button class="btn sm" data-act="ficha" data-v="rpd">🖨 Folha em branco</button><button class="btn sm" data-act="ficha" data-v="distorcoes">🖨 Distorções</button></div>
-  ${[...p.rpd].reverse().map(r => `<details class="item"><summary>${fmt(r.data)} <span class="sum-meta">· ${esc((r.pa || "").slice(0, 70)) || "(sem pensamento)"}</span></summary><div class="body"><div class="g2" style="margin-top:10px">
-    ${fld(r, "data", "Data", "date")}${fld(r, "situacao", "Situação", "area", { rows: 2 })}
-    ${fld(r, "pa", "Pensamento automático", "area", { rows: 2 })}${fld(r, "credPA", "Quanto acredita (%)", "number", { min: 0, max: 100 })}
-    ${fld(r, "emocao", "Emoção", "text")}${fld(r, "intens", "Intensidade (%)", "number", { min: 0, max: 100 })}
-    ${fld(r, "distorcao", "Distorção", "select", { options: dist })}${fld(r, "resposta", "Resposta adaptativa", "area", { rows: 3, hint: "Use as perguntas socráticas." })}
-    ${fld(r, "credResp", "Quanto acredita na resposta (%)", "number", { min: 0, max: 100 })}${fld(r, "resultado", "Resultado: reavaliação do PA e da emoção", "area", { rows: 2 })}
-  </div><button class="btn sm del" data-act="del" data-from="rpd" data-o="${reg(p.rpd)}" data-v="${r.id}">Excluir</button></div></details>`).join("") || `<p class="muted">Nenhum RPD.</p>`}
+  ${[...p.rpd].reverse().map(r => `<details class="item" ${RPD_OPEN === r.id ? "open" : ""}><summary>${fmt(r.data)} <span class="sum-meta">· ${esc((r.pa || r.situacao || "").slice(0, 70)) || "(sem pensamento)"}</span></summary><div class="body">${rpdForm(r)}
+  <button class="btn sm del" data-act="del" data-from="rpd" data-o="${reg(p.rpd)}" data-v="${r.id}">Excluir</button></div></details>`).join("") || `<p class="muted">Nenhum RPD.</p>`}
   <h2>Seta descendente</h2>
   <div class="row" style="margin-bottom:10px"><button class="btn pri sm" data-act="newSeta">+ Nova seta</button><button class="btn sm" data-act="ficha" data-v="seta">🖨 Folha em branco</button></div>
   ${[...p.setas].reverse().map(s => `<details class="item" open><summary>${fmt(s.data)} <span class="sum-meta">· ${esc((s.pa || "").slice(0, 60)) || "(nova)"}${s.crenca ? " → " + esc(s.crenca.slice(0, 40)) : ""}</span></summary><div class="body"><div class="steps" style="margin-top:10px">
@@ -1038,7 +1033,7 @@ document.addEventListener("click", async e => {
     case "delP": if (await confirmDel(`o paciente <b>${esc(p.codigo || "(sem código)")}</b> (vai para “Pacientes excluídos” em Dados e backup)`)) { DB.pacientes.splice(DB.pacientes.indexOf(p), 1); logP(p, "Paciente excluído"); DB.lixeira.push({ id: uid(), quando: nowISO(), item: p }); touch(); V.page = "pacientes"; render(); } break;
     case "restoreP": { const L = DB.lixeira.find(x => x.id === v); DB.lixeira.splice(DB.lixeira.indexOf(L), 1); if (L.tipo === "literatura") { DB.literatura.unshift(L.item._lit); touch(); go(); break; } fill(L.item, novoPaciente()); logP(L.item, "Paciente restaurado da lixeira"); DB.pacientes.push(L.item); touch(); go(); break; }
     case "newS": { const ns = novaSessao(p); p.sessoes.push(ns); logP(p, `Sessão ${ns.num} criada`); touch(); V.tab = "sessoes"; render(); break; }
-    case "newRPD": p.rpd.push({ id: uid(), data: today(), situacao: "", pa: "", credPA: "", emocao: "", intens: "", distorcao: "", resposta: "", credResp: "", resultado: "" }); touch(); go(); break;
+    case "newRPD": RPD_OPEN = uid(); p.rpd.push({ id: RPD_OPEN, emocoes: [], emoc2: [], data: today(), situacao: "", pa: "", credPA: "", emocao: "", intens: "", distorcao: "", resposta: "", credResp: "", resultado: "" }); touch(); go(); break;
     case "newSeta": p.setas.push({ id: uid(), data: today(), pa: "", passos: ["", ""], crenca: "", cat: "" }); touch(); go(); break;
     case "addPasso": p.setas.find(x => x.id === v).passos.push(""); touch(); go(); break;
     case "newAware": p.aware.push({ id: uid(), data: today(), situacao: "", antes: "", depois: "", aceitar: "", observar: "", agir: "", esperar: "" }); touch(); go(); break;
