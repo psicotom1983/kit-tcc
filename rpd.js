@@ -35,14 +35,15 @@ function rpdForm(r) {
   const quem = r.pessoa ? esc(r.pessoa) : "alguém de quem você gosta muito";
   const temEv = r.evA || r.evC, temQ = RPD_PERG.some(([k]) => r[k]);
   return `<div class="rpd">
-  ${fld(r, "data", "Data", "date")}
+  <div class="row" style="align-items:flex-end;gap:10px">${fld(r, "data", "Data", "date")}<p class="ref" style="margin:0 0 10px">Deslize para o lado → para ver as colunas</p></div>
+  <div class="rpd-row">
   ${rpdBox(1, "📋", "Situação", "#c9a227", fld(r, "situacao", "O que aconteceu?", "area", { rows: 3, hint: "Com quem você estava? O que estava fazendo? Quando? Onde?" }))}
   ${rpdBox(2, "💭", "Pensamentos automáticos", "#b0607a", fld(r, "pa", "O que passou pela sua cabeça?", "area", { rows: 3, hint: "Que pensamentos ou imagens vieram? O que isso diz sobre você, sua vida, seu futuro? O que você temia que acontecesse?" }) + rpdPct(r, "credPA", "Quanto acreditou nesses pensamentos?"))}
   ${rpdBox(3, "🎭", "Emoções", "#4f8a6b", `<p class="ref" style="margin:0 0 6px">Uma palavra para cada emoção, e quanto ela foi forte (0 a 100%).</p>${rpdEmo(r, "emocoes")}
     <button class="btn sm" data-rpd="ajudaEmo" style="margin-top:8px">❓ Você sabe diferenciar emoções de pensamentos?</button>`)}
   ${rpdBox(4, "🚶", "Comportamento", "#4f74a8", fld(r, "comport", "O que você fez?", "area", { rows: 2, hint: "Que ações você tomou quando se sentiu ou pensou dessa forma?" }))}
-  <details class="rpd-mais" ${temEv ? "open" : ""}><summary>＋ Evidências a favor e contra (opcional)</summary>
-    <div class="g2">${fld(r, "evA", "✔ Evidências que apoiam o pensamento", "area", { rows: 3 })}${fld(r, "evC", "✖ Evidências que não apoiam o pensamento", "area", { rows: 3 })}</div></details>
+  <details class="rpd-mais rpd-ev" ${temEv ? "open" : ""}><summary><b>＋</b> <span>Evidências (opcional)</span></summary>
+    <div>${fld(r, "evA", "✔ Evidências que apoiam o pensamento", "area", { rows: 3 })}${fld(r, "evC", "✖ Evidências que não apoiam o pensamento", "area", { rows: 3 })}</div></details>
   ${rpdBox(5, "💡", "Respostas alternativas", "#8a6bb0", `
     <div class="rpd-foco"><p style="margin:0 0 6px"><b>💛 Se ${quem} estivesse nessa mesma situação e tivesse esse pensamento, o que você diria para essa pessoa?</b></p>
       ${fld(r, "pessoa", "Pense em alguém próximo (nome ou apelido, opcional)", "text", { ph: "ex.: minha irmã, meu melhor amigo" })}
@@ -56,6 +57,7 @@ function rpdForm(r) {
     <p class="ref" style="margin:8px 0 6px">Que emoções você sente agora, e com que força?</p>${rpdEmo(r, "emoc2")}
     ${fld(r, "fazer", "O que seria bom fazer?", "area", { rows: 2 })}
     ${r.resultado ? fld(r, "resultado", "Anotações do resultado", "area", { rows: 2 }) : ""}`)}
+  </div>
   <p class="ref">Baseado em Greenberger e Padesky (2017) e J. Beck (2022).</p></div>`;
 }
 const RPD_AJUDA = `<h2 style="margin-top:0">Emoção ou pensamento?</h2>
@@ -68,7 +70,12 @@ const RPD_AJUDA = `<h2 style="margin-top:0">Emoção ou pensamento?</h2>
 
 (() => {
   const st = document.createElement("style");
-  st.textContent = `.rpd{display:grid;gap:12px;margin-top:10px}
+  st.textContent = `.rpd{display:grid;gap:8px;margin-top:10px}
+.rpd-row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 10px;align-items:stretch}
+.rpd-row>*{flex:0 0 min(84vw,310px);scroll-snap-align:start;margin:0}
+.rpd-row>.rpd-ev:not([open]){flex:0 0 54px;display:flex;align-items:stretch}
+.rpd-ev:not([open]) summary{writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;list-style:none;font-size:.9em}
+.rpd-ev summary::-webkit-details-marker{display:none}.rpd-ev summary b{font-size:1.4em}
 .rpd-box{border:1px solid var(--line);border-top:5px solid var(--c);border-radius:14px;padding:12px 14px;background:var(--panel)}
 .rpd-box h3{margin:0 0 8px;font-size:1.02em;display:flex;align-items:center;gap:6px}.rpd-n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--c);color:#fff;font-size:.8em}
 .rpd-pct input{width:100%;accent-color:var(--accent)}.rpd-pct b{color:var(--accent)}

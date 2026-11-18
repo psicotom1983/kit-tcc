@@ -55,7 +55,22 @@ const Temas = (() => {
   css += `:root.hc{--bg:#000!important;--panel:#000!important;--ink:#fff!important;--muted:#fff!important;--line:#fff!important;--accent:#ffd400!important;--on-accent:#000!important;--accent-soft:#222!important;--chip:#111!important;--warn:#ffd400!important;--danger:#ff6b6b!important;--ok:#7dff8a!important;--bgimg:none!important;color-scheme:dark}
 :root.hc a{text-decoration:underline}:root.hc .card,:root.hc details.item,:root.hc .btn,:root.hc input,:root.hc select,:root.hc textarea{border-width:2px!important}
 :root.hc :focus-visible{outline:3px solid #ffd400!important;outline-offset:2px}
-.flag{flex-shrink:1;min-width:0}#a11yDlg .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}#a11yDlg .btn{min-height:44px}#a11yDlg h3{margin:14px 0 6px}`;
+.flag{flex-shrink:1;min-width:0}i.ti{font-style:normal}
+/* ---- Estilo "quadradinhos" (padrão). O clássico é só não ter a classe ui-cards ---- */
+:root.ui-cards main{line-height:1.45}
+:root.ui-cards .card,:root.ui-cards details.item{border-radius:16px;box-shadow:var(--shadow,0 1px 3px rgba(0,0,0,.08));margin:0 0 12px}
+:root.ui-cards details.item>summary{padding:14px 16px;font-weight:600}
+:root.ui-cards .btn{border-radius:12px}
+:root.ui-cards h1{margin:4px 0 10px}
+:root.ui-cards .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;border:0;overflow:visible;-webkit-mask-image:none;margin:10px 0 16px}
+:root.ui-cards .tabs button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;white-space:normal;text-align:center;line-height:1.15;font-size:11.5px;padding:10px 4px;min-height:68px;background:var(--panel);border:1px solid var(--line);border-radius:14px;margin:0;box-shadow:var(--shadow,0 1px 3px rgba(0,0,0,.06));color:var(--ink)}
+:root.ui-cards .tabs button .ti{font-size:22px}
+:root.ui-cards .tabs button.on{border:2px solid var(--accent);background:var(--accent-soft);font-weight:700}
+:root.ui-cards main>p.muted{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;position:relative}
+:root.ui-cards main>p.muted.aberto{display:block}
+:root.ui-cards .chip,:root.ui-cards .chips button{border-radius:12px}
+@media(min-width:761px){:root.ui-cards .tabs{grid-template-columns:repeat(8,1fr)}}
+#a11yDlg .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}#a11yDlg .btn{min-height:44px}#a11yDlg h3{margin:14px 0 6px}`;
   const st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
 
   /* ---------- preferências do aparelho ---------- */
@@ -71,6 +86,7 @@ const Temas = (() => {
     const t = resolve(tema()), r = document.documentElement;
     if (t) r.dataset.theme = t; else delete r.dataset.theme;
     r.classList.toggle("hc", !!P.hc);
+    r.classList.toggle("ui-cards", P.estilo !== "classico");
     if (document.body) document.body.style.zoom = P.zoom && P.zoom !== 1 ? P.zoom : "";
   }
   function escolher(t) {
@@ -104,6 +120,8 @@ const Temas = (() => {
     d.innerHTML = `<h2 style="margin-top:0">Aa Acessibilidade e temas</h2>
       <h3>Tamanho da tela: ${z}%</h3>
       <div class="row"><button class="btn" data-a11y="menos" aria-label="Reduzir">A−</button><button class="btn" data-a11y="mais" aria-label="Ampliar">A+</button><button class="btn" data-a11y="restaurar">↺ Restaurar</button></div>
+      <h3>Estilo</h3>
+      <div class="row"><button class="btn${P.estilo !== "classico" ? " pri" : ""}" data-a11y="cards">▦ Quadradinhos</button><button class="btn${P.estilo === "classico" ? " pri" : ""}" data-a11y="classico">☰ Clássico</button></div>
       <h3>Leitura</h3>
       <div class="row"><button class="btn${P.hc ? " pri" : ""}" data-a11y="hc">◐ Alto contraste: ${P.hc ? "ligado" : "desligado"}</button>
       <button class="btn${P.tts ? " pri" : ""}" data-a11y="tts">🔊 Ler botões ao tocar: ${P.tts ? "ligado" : "desligado"}</button></div>
@@ -125,11 +143,15 @@ const Temas = (() => {
     if (a === "menos") P.zoom = ZOOM[Math.max(0, (i < 0 ? 2 : i) - 1)];
     if (a === "restaurar") P.zoom = 1;
     if (a === "hc") P.hc = !P.hc;
+    if (a === "cards") P.estilo = "cards";
+    if (a === "classico") P.estilo = "classico";
     if (a === "tts") { P.tts = !P.tts; if (P.tts) falar("Leitura de botões ligada"); }
     if (a !== "open") { salvaP(); aplicar(); }
     janela();
   });
   document.addEventListener("change", e => { if (e.target.id === "cfgTema") escolher(e.target.value); });
+  /* textos de introdução ficam em 2 linhas; toque para ler tudo */
+  document.addEventListener("click", e => { const t = e.target.closest(".ui-cards main>p.muted"); if (t && !e.target.closest("a,button")) t.classList.toggle("aberto"); });
 
   aplicar();
   document.addEventListener("DOMContentLoaded", () => aplicar());
