@@ -59,6 +59,16 @@ Todos os pedidos feitos até agora, com a situação de cada um.
 - 🧪 📓 Caderno: anotações livres e notas de áudio (criptografadas, vão para o Drive, lixeira com restaurar)
 - 🧪 🎤 Ditado: botão de microfone em todos os campos de texto grandes (paciente, sessões, registros, caderno)
 
+## Pedidos de 18/11/2026
+- 🧪 RPD novo em cartões (6 colunas: Situação, Pensamentos, Emoções, Comportamento, Respostas alternativas, Resultado); evidências a favor/contra escondidas no "＋"; emoções com busca ao digitar (exemplos só de emoções agradáveis, para não induzir); foco na pergunta "o que você diria a alguém que você ama?"; ajuda "emoção ou pensamento?"
+- 🧪 Temas Café / Terra (escuro), Café com leite (claro) e Fosco escuro
+- ⬜ Primeiro acesso: tela de **Boas-vindas** explicando o básico
+- ⬜ Botão **Dicas / Ajuda**: perguntas sobre o programa e sobre o tema (TCC, clínica)
+- ⬜ **Psicoeducação** pronta para usar: "emoção x pensamento" (o RPD já leva a ela)
+- ⬜ Visual estilo app de compras: tudo em **quadradinhos com ícones**, espaçados, cores calmas e foscas, menos texto na tela
+- ⬜ Folha em branco do RPD (impressão) no novo formato de 6 colunas
+- ⬜ Versão final: **Termos de uso / contrato de aceite** das condições
+
 ## Ideias para depois
 - ⏳ Área do paciente (fichas preenchidas entre sessões)
 - ⏳ Transcrição de gravações já feitas (sem ser ao vivo)
