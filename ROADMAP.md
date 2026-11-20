@@ -73,6 +73,16 @@ Todos os pedidos feitos até agora, com a situação de cada um.
 - 🧪 Campos de texto (sessão e outros): botão **＋ / −** em cada quadrado; fechado mostra só ~2 linhas, ＋ abre o texto inteiro (crescendo junto com o texto), − volta a encolher
 - 🧪 Materiais do estágio viraram 11 técnicas novas (continuum, preocupação produtiva, custos da ansiedade, pizza da responsabilidade, checklist de problemas, assertividade, “dia perfeito”, auto-observação, psicoeducação do pânico, metáforas, baralhos), ligadas aos protocolos
 
+## Pedidos de 19/11/2026 (noite) — bibliografia
+- 🧪 Área 🎓 Estudo: 🗂 Estudos de casos (7 casos fictícios didáticos) e 📖 Glossário (termos, técnicas, distorções, com referências)
+- 🧪 Técnicas com 💬 Exemplo e 📖 Onde estudar (livro, capítulo e páginas do sumário)
+- 🧪 DCC guiado por perguntas; ⬇ puxar situações dos RPDs; 🃏 cartão de enfrentamento para imprimir
+- 🧪 Casos parecidos no Direcionamento do paciente
+- 🧪 Técnicas de outras áreas: yoga, metas SMART, PDCA, SWOT, 5W2H, matriz de prioridades
+- 🧪 Painel extra do glossário (fora do kit): claude.ai/artifact/Y2umJ8VBQf2JHpM9rnz6ay
+- ⬜ Próximas leituras: livros de raiva, ACT completos, DSM-5-TR, Stahl, Emocionário, slides e minicursos
+- ⬜ Mais exemplos e "onde estudar" para as técnicas restantes
+
 ## Ideias para depois
 - ⏳ Área do paciente (fichas preenchidas entre sessões)
 - ⏳ Transcrição de gravações já feitas (sem ser ao vivo)
