@@ -2,7 +2,7 @@
    Kit Clínico TCC — APLICATIVO (v2)
    ===================================================================== */
 "use strict";
-const APP_VER = "2.8 (18/11/2026)"; /* mude a cada atualização, junto com o CACHE do sw.js */
+const APP_VER = "2.9 (19/11/2026)"; /* mude a cada atualização, junto com o CACHE do sw.js */
 /* ============================== utilidades ============================== */
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -384,7 +384,7 @@ function pgPaciente() {
   const tabs = [["direcao", "🧭 Direcionamento"], ["sessoes", `🗓 Sessões (${p.sessoes.length})`], ["conc", "🧩 Conceituação"], ["registros", "📝 RPD · Seta · AWARE"], ["risco", "⚠️ Risco"], ["docs", `📎 Documentos (${p.docs.length})`], ["evol", "📈 Evolução"], ["dados", "🪪 Cadastro"]];
   const body = { direcao: tabDirecao, sessoes: tabSessoes, conc: tabConc, registros: tabRegistros, risco: tabRisco, docs: tabDocs, evol: tabEvol, dados: tabCadastro }[V.tab] || tabDirecao;
   return `<div class="ph"><button class="btn sm" data-act="nav" data-v="pacientes">← Pacientes</button><h1 id="pTitle">${esc(p.codigo || "(sem código)")}</h1>
-  ${p.demandas.map(d => PRO[d] ? `<span class="badge ${PRO[d].cor}">${esc(PRO[d].nome)}</span>` : "").join("")}<span class="sp"></span><button class="btn sm" data-act="agNovo" data-v="${today()}" data-pid="${p.id}">📅 Agendar</button></div>
+  ${p.demandas.map(d => PRO[d] ? `<span class="badge ${PRO[d].cor}">${esc(PRO[d].nome)}</span>` : "").join("")}<span class="sp"></span><button class="btn sm" data-act="agNovo" data-v="${today()}" data-pid="${p.id}">📅 Agendar</button><button class="btn sm" data-caso="print">🖨 Imprimir caso</button></div>
   ${(() => { const now = new Date(), o = agOcc(now, new Date(now.getTime() + 60 * 86400000)).find(x => x.ev.pid === p.id); return o ? `<p class="ref" style="margin:-4px 0 6px">Próximo atendimento: <b>${DSEM[o.start.getDay()]} ${fmt(o.date)} às ${esc(o.ev.hora)}</b></p>` : ""; })()}
   <div class="tabs">${tabs.map(([id, t]) => `<button class="${V.tab === id ? "on" : ""}" data-act="tab" data-v="${id}">${t.replace(/^(\S+) /, '<i class="ti">$1</i> ')}</button>`).join("")}</div>
   ${body(p)}`;
@@ -556,12 +556,14 @@ function docRow(p, d, compact) {
 }
 function tabSessoes(p) {
   const ses = [...p.sessoes].reverse();
-  return `<div class="row" style="margin-bottom:12px"><button class="btn pri" data-act="newS">+ Nova sessão</button>
+  return `<div class="row" style="margin-bottom:12px"><button class="btn pri" data-act="newS">+ Nova sessão</button><button class="btn" data-caso="falta">❌ Registrar falta</button>
   <details style="flex:1;min-width:200px"><summary class="muted" style="cursor:pointer">Estrutura da sessão (J. Beck) — lembrete</summary><ol>${TEC.estrutura.passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol></details></div>
   ${abordarCard(p)}
   ${ses.length ? ses.map((s, i) => {
     const sdocs = p.docs.filter(d => d.sessaoId === s.id), recHere = REC.on && REC.sid === s.id;
-    return `<details class="item" ${i === 0 ? "open" : ""}><summary>Sessão ${s.num} <span class="sum-meta">· ${fmt(s.data)}${s.humor !== "" ? ` · humor ${s.humor}/10` : ""}${s.tecnicas.length ? ` · ${s.tecnicas.length} técnica(s)` : ""}${sdocs.length ? ` · 📎${sdocs.length}` : ""}</span>${recHere ? `<span class="badge danger">● gravando</span>` : ""}</summary><div class="body">
+    return `<details class="item" ${i === 0 ? "open" : ""}><summary>${sesTitulo(s)} <span class="sum-meta">· ${fmt(s.data)}${s.humor !== "" ? ` · humor ${s.humor}/10` : ""}${s.tecnicas.length ? ` · ${s.tecnicas.length} técnica(s)` : ""}${sdocs.length ? ` · 📎${sdocs.length}` : ""}</span>${recHere ? `<span class="badge danger">● gravando</span>` : ""}</summary><div class="body">
+    <div class="g6" style="margin-bottom:6px">${fld(s, "presenca", "Presença", "select", { options: PRESENCA })}${fld(s, "hora", "Horário", "time")}${ehFalta(s) ? fld(s, "data", "Data", "date") : ""}</div>
+    ${ehFalta(s) ? fld(s, "motivo", "Motivo / observação", "area", { rows: 2, ph: "ex.: avisou com antecedência, sem contato, doença…" }) : `
     <div class="row recrow"><button class="btn ${recHere ? "del" : ""}" data-act="${recHere ? "recStop" : "recStart"}" data-v="${s.id}" ${REC.on && !recHere ? "disabled" : ""}>${recHere ? "■ Parar gravação" : "🎙 Gravar sessão"}</button>
       <button class="btn" data-act="upDoc" data-v="${s.id}">📎 Anexar</button><button class="btn" data-act="upCam" data-v="${s.id}">📷 Foto</button>
       ${s.transcricao ? `<button class="btn" data-act="iaResumo" data-v="${s.id}">🤖 Resumir transcrição</button>` : ""}</div>
@@ -576,6 +578,7 @@ function tabSessoes(p) {
     ${s.transcricao || recHere ? fld(s, "transcricao", "📝 Transcrição da sessão (editável)", "area", { rows: 6, id: "tr-" + s.id }) : ""}
     ${s.consentGrav ? `<p class="ref">Consentimento para gravação registrado em ${fmtDT(s.consentGrav)}.</p>` : ""}
     ${sdocs.length ? `<div class="f"><span>Anexos e gravações desta sessão</span><ul class="plist">${sdocs.map(d => docRow(p, d, true)).join("")}</ul></div>` : ""}
+`}
     <div class="row"><button class="btn sm del" data-act="del" data-from="sessoes" data-o="${reg(p.sessoes)}" data-v="${s.id}">Excluir sessão</button></div>
   </div></details>`;
   }).join("") : `<div class="card">Nenhuma sessão registrada.</div>`}`;
