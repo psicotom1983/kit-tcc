@@ -2,7 +2,7 @@
    Kit Clínico TCC — APLICATIVO (v2)
    ===================================================================== */
 "use strict";
-const APP_VER = "3.1 · 19/11/2026 22:09"; /* mude a cada atualização, junto com o CACHE do sw.js */
+const APP_VER = "3.2 · 19/11/2026 22:25"; /* mude a cada atualização, junto com o CACHE do sw.js */
 /* ============================== utilidades ============================== */
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -170,7 +170,7 @@ function render() {
   const app = $("#app");
   if (!DB) { document.body.classList.remove("ia-open"); app.innerHTML = lockScreen(); setTimeout(() => $("#pw") && !isMobile() && $("#pw").focus(), 30); return; }
   const y = window.scrollY, keep = V._keepScroll; V._keepScroll = false;
-  const nav = [["pacientes", "👥 Pacientes"], ["agenda", "📅 Agenda"], ["protocolos", "🧭 Protocolos"], ["tecnicas", "🧰 Técnicas"], ["caderno", "📓 Caderno"], ["literatura", "📚 Literatura Científica"], ["etica", "⚖ Ética e CFP"], ["dados", "☁ Dados e backup"], ["config", "⚙ Configurações"]];
+  const nav = [["pacientes", "👥 Pacientes"], ["agenda", "📅 Agenda"], ["protocolos", "🧭 Protocolos"], ["tecnicas", "🧰 Técnicas"], ["caderno", "📓 Caderno"], ["estudo", "🎓 Estudo"], ["literatura", "📚 Literatura Científica"], ["etica", "⚖ Ética e CFP"], ["dados", "☁ Dados e backup"], ["config", "⚙ Configurações"]];
   const cur = V.page === "paciente" ? "pacientes" : V.page;
   applyPrefs();
   app.innerHTML = `<header><span class="brand">🧠<span class="bt"> Kit Clínico TCC</span> <small class="ver">v${APP_VER}</small></span><span class="sp"></span>
@@ -202,6 +202,9 @@ function page() {
     case "agenda": return pgAgenda();
     case "literatura": return pgLiteratura();
     case "caderno": return pgCaderno();
+    case "estudo": return pgEstudo();
+    case "casos": return pgCasos();
+    case "glossario": return pgGlossario();
     default: return pgPacientes();
   }
 }
@@ -499,6 +502,7 @@ function tabDirecao(p) {
   const prs = p.demandas.map(id => PRO[id]).filter(Boolean).sort((a, b) => (a.id === "suicidio" ? -1 : b.id === "suicidio" ? 1 : 0));
   if (prs.length) h += `<h2>Protocolos das demandas</h2><p class="muted" style="margin-top:-4px">Verde ✓ = já usada · contorno laranja = próximo passo sugerido. Marque as técnicas em cada sessão para o direcionamento acompanhar.</p>` + prs.map(pr => protoCard(pr, used, true)).join("");
   h += `<div class="card"><button class="btn" data-act="iaPerg" data-v="Com base no resumo deste paciente, sugira técnicas e um roteiro para a próxima sessão, com referências.">🤖 Pedir sugestões à IA para a próxima sessão</button></div>`;
+  h += casosParecidos(p);
   return h;
 }
 
@@ -710,12 +714,15 @@ function tabConc(p) {
   return `<div class="row" style="justify-content:flex-end;margin-bottom:8px"><button class="btn sm" data-act="printDCC">🖨 Imprimir diagrama (supervisão)</button><button class="btn sm" data-act="iaPerg" data-v="Analise a conceituação cognitiva deste paciente: aponte lacunas, hipóteses de crenças centrais e intermediárias e como testá-las, com referências.">🤖 Analisar com IA</button></div>
   <div class="card"><h3>Tríade cognitiva</h3><div class="tri">${fld(c, "eu", "Visão de si (EU)", "area", { ph: "Ex.: sou incapaz, sou um fardo" })}${fld(c, "mundo", "Visão do mundo / dos outros", "area", { ph: "Ex.: as pessoas me rejeitam" })}${fld(c, "futuro", "Visão do futuro", "area", { ph: "Ex.: nada vai mudar" })}</div></div>
   <div class="card"><h3>Diagrama de conceituação cognitiva (J. Beck)</h3>
-  ${fld(c, "infancia", "Dados relevantes da história / infância", "area")}
-  <div class="g2">${fld(c, "crencaCentral", "Crença(s) central(is)", "area", { rows: 2 })}${fld(c, "categoria", "Categoria", "select", { options: ["", "Desamparo", "Desamor", "Desvalor", "Desamparo + desvalor", "Desamor + desvalor", "Outra"] })}</div>
-  ${fld(c, "regras", "Crenças intermediárias — regras, atitudes, pressupostos (“Se…, então…”)", "area")}
-  ${fld(c, "estrategias", "Estratégias compensatórias", "area", { rows: 2 })}
+  <p class="ref" style="margin-top:-4px">Preencha respondendo às perguntas. Dica: faça antes alguns RPDs; eles alimentam as situações típicas.</p>
+  <div class="row" style="margin-bottom:8px"><button class="btn sm" data-dcc="puxar">⬇ Puxar situações dos RPDs</button><button class="btn sm" data-dcc="cartao">🃏 Cartão de enfrentamento</button></div>
+  ${fld(c, "infancia", "Dados relevantes da história / infância", "area", { hint: DCC_PERG.infancia })}
+  <div class="g2">${fld(c, "crencaCentral", "Crença(s) central(is)", "area", { rows: 2, hint: DCC_PERG.crencaCentral })}${fld(c, "categoria", "Categoria", "select", { options: ["", "Desamparo", "Desamor", "Desvalor", "Desamparo + desvalor", "Desamor + desvalor", "Outra"] })}</div>
+  ${fld(c, "regras", "Crenças intermediárias — regras, atitudes, pressupostos (“Se…, então…”)", "area", { hint: DCC_PERG.regras })}
+  ${fld(c, "estrategias", "Estratégias compensatórias", "area", { rows: 2, hint: DCC_PERG.estrategias })}
+  ${fld(c, "novaCrenca", "Crença nova / alternativa (para o cartão de enfrentamento)", "area", { rows: 2, hint: "Construída com o paciente ao longo do tratamento. Ex.: “Sou capaz em muitas coisas, mesmo errando às vezes.”" })}
   <h3 style="margin-top:12px">Situações típicas</h3>
-  <div class="g3">${c.situacoes.map((s, i) => `<div class="card" style="background:var(--bg)"><b>Situação ${i + 1}</b>${fld(s, "situacao", "Situação", "area", { rows: 2 })}${fld(s, "pa", "Pensamento automático", "area", { rows: 2 })}${fld(s, "significado", "Significado do PA", "area", { rows: 2 })}${fld(s, "emocao", "Emoção", "text")}${fld(s, "comportamento", "Comportamento", "text")}</div>`).join("")}</div>
+  <div class="g3">${c.situacoes.map((s, i) => `<div class="card" style="background:var(--bg)"><b>Situação ${i + 1}</b>${fld(s, "situacao", "Situação", "area", { rows: 2, ph: DCC_PERG.situacao })}${fld(s, "pa", "Pensamento automático", "area", { rows: 2, ph: DCC_PERG.pa })}${fld(s, "significado", "Significado do PA", "area", { rows: 2, ph: DCC_PERG.significado })}${fld(s, "emocao", "Emoção", "text", { ph: DCC_PERG.emocao })}${fld(s, "comportamento", "Comportamento", "text", { ph: DCC_PERG.comportamento })}</div>`).join("")}</div>
   <p class="ref">${esc(REF.JB)} · ${esc(REF.KPD)}</p></div>`;
 }
 /* ---------- registros ---------- */
@@ -811,7 +818,7 @@ function tabCadastro(p) {
 
 /* ---------- protocolos e técnicas ---------- */
 function pgProtocolos() {
-  return `<h1>Protocolos por demanda</h1><p class="muted">Síntese de avaliação, fases de tratamento, técnicas e cuidados, com base em manuais e diretrizes. Toque numa técnica para ver o passo a passo.</p>
+  return `<div class="ph"><h1>Protocolos por demanda</h1><span class="sp"></span><button class="btn sm" data-act="nav" data-v="casos">🗂 Estudos de casos</button></div><p class="muted">Síntese de avaliação, fases de tratamento, técnicas e cuidados, com base em manuais e diretrizes. Toque numa técnica para ver o passo a passo.</p>
   ${PROTOCOLOS.map(pr => `<details class="item"><summary>${esc(pr.nome)} <span class="badge ${pr.cor}">${pr.fases.length} fases</span></summary><div class="body" style="padding-top:12px">${protoCard(pr, new Set(), false)}</div></details>`).join("")}`;
 }
 function tecHTML(t) {
@@ -820,7 +827,7 @@ function tecHTML(t) {
     ${t.passos ? `<ol>${String(t.passos).split("\n").filter(Boolean).map(x => `<li>${esc(x)}</li>`).join("")}</ol>` : ""}
     ${semRef(t) ? `<div class="alert danger">⚠ Sem referência científica. <a href="#" data-act="tecEdit" data-v="${esc(t.id)}">Completar agora</a></div>` : `<b class="ref">Referências</b><p class="ref">${nl(t.refs)}</p>`}`;
   return `<div class="row" style="justify-content:space-between"><h2 style="margin:0">${esc(t.nome)}</h2><span class="badge accent">${esc(t.ab)}</span></div>
-  <p><b>Quando usar:</b> ${esc(t.ind)}</p><ol>${t.passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol>${t.mat ? `<p class="ref">📁 Material de apoio (sua pasta do estágio): ${esc(t.mat)}</p>` : ""}
+  <p><b>Quando usar:</b> ${esc(t.ind)}</p><ol>${t.passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol>${t.mat ? `<p class="ref">📁 Material de apoio (sua pasta do estágio): ${esc(t.mat)}</p>` : ""}${tecEstudo(t)}
   ${t.cuid ? `<div class="alert warn"><b>Cuidado:</b> ${esc(t.cuid)}</div>` : ""}
   <b class="ref">Referências</b>${refList(t.refs)}
   ${t.ficha ? `<button class="btn" data-act="ficha" data-v="${t.ficha}">🖨 Imprimir ficha para o paciente</button>` : ""}`;
