@@ -282,3 +282,37 @@ function pgGlossario() {
     }
   });
 })();
+
+/* ---- 📊 Estilo Painel BI: indicadores do topo de cada tela ---- */
+function biDecorar() {
+  if (!document.documentElement.classList.contains("ui-bi") || !DB) return;
+  const m = document.querySelector("main"); if (!m || m.querySelector(".bi-kpis")) return;
+  const K = (n, l) => `<div class="bi-k"><b>${n}</b><span>${l}</span></div>`;
+  const B = (tit, obj) => { const E = Object.entries(obj).sort((a, b) => b[1] - a[1]), mx = Math.max(1, ...E.map(e => e[1]));
+    return `<div class="bi-bars"><h4>${tit}</h4>${E.map(([k, v]) => `<div class="bi-bar"><span>${esc(k)}</span><i style="width:${v / mx * 100}%"></i><em>${v}</em></div>`).join("")}</div>`; };
+  const pg = V.page, ps = DB.pacientes; let h = "";
+  const freq = L => { const a = L.filter(s => !s.presenca || s.presenca === "Compareceu").length, f = L.filter(s => s.presenca === "Falta" || s.presenca === "Falta justificada").length; return a + f ? Math.round(a / (a + f) * 100) + "%" : "—"; };
+  if (pg === "pacientes" && V.pid) {
+    const p = ps.find(x => x.id === V.pid); if (!p) return; const ss = p.sessoes;
+    const ult = [...ss].reverse().find(s => s.humor !== "" && s.humor != null);
+    h = K(ss.filter(s => !s.presenca || s.presenca === "Compareceu").length, "sessões") + K(ss.filter(s => (s.presenca || "").startsWith("Falta")).length, "faltas") + K(freq(ss), "frequência") + K(ult ? ult.humor : "—", "último humor") + K(p.rpd.length, "RPDs");
+  } else if (pg === "pacientes") {
+    const all = ps.flatMap(p => p.sessoes);
+    h = K(ps.length, "pacientes") + K(all.filter(s => !s.presenca || s.presenca === "Compareceu").length, "sessões") + K(all.filter(s => (s.presenca || "").startsWith("Falta")).length, "faltas") + K(freq(all), "frequência") + K(ps.reduce((n, p) => n + p.rpd.length, 0), "RPDs");
+  } else if (pg === "tecnicas") {
+    const c = {}; TECNICAS.forEach(t => c[t.ab] = (c[t.ab] || 0) + 1);
+    h = K(TECNICAS.length, "técnicas") + K(Object.keys(c).length, "abordagens") + K(Object.keys(ESTUDO).length, "com exemplo/estudo");
+    m.insertAdjacentHTML("afterbegin", B("Técnicas por abordagem", c));
+  } else if (pg === "protocolos") {
+    h = K(PROTOCOLOS.length, "protocolos") + K(PROTOCOLOS.reduce((n, p) => n + p.fases.length, 0), "fases") + K(CASOS.length, "casos de estudo");
+  } else if (pg === "glossario") {
+    const g = glossTodos(), c = {}; g.forEach(x => { const k = x.cat.split(" · ")[0]; c[k] = (c[k] || 0) + 1; });
+    h = K(g.length, "termos") + K(Object.keys(c).length, "categorias") + K(Object.keys(REF).length, "referências");
+    m.insertAdjacentHTML("afterbegin", B("Termos por categoria", c));
+  } else if (pg === "estudo" || pg === "casos") {
+    h = K(CASOS.length, "casos") + K(glossTodos().length, "termos") + K(TECNICAS.length, "técnicas") + K(Object.keys(REF).length, "referências");
+  } else if (pg === "caderno") {
+    const c = DB.caderno || {}; h = K((c.notas || []).length, "anotações") + K((c.docs || []).length, "notas de áudio");
+  } else return;
+  m.insertAdjacentHTML("afterbegin", `<div class="bi-kpis">${h}</div>`);
+}

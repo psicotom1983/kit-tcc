@@ -2,7 +2,7 @@
    Kit Clínico TCC — APLICATIVO (v2)
    ===================================================================== */
 "use strict";
-const APP_VER = "3.2 · 19/11/2026 22:25"; /* mude a cada atualização, junto com o CACHE do sw.js */
+const APP_VER = "3.3 · 20/11/2026 00:26"; /* mude a cada atualização, junto com o CACHE do sw.js */
 /* ============================== utilidades ============================== */
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -189,6 +189,7 @@ function render() {
   /* celular: mostra a aba/menu ativo (as barras rolam para o lado) */
   document.querySelectorAll("nav button.on, .tabs button.on").forEach(b => b.scrollIntoView({ inline: "center", block: "nearest" }));
   window.scrollTo(0, keep ? y : 0);
+  biDecorar();
   if (!DB.config.bemVindo) bvAgendar();
 }
 function page() {

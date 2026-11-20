@@ -70,6 +70,16 @@ const Temas = (() => {
 :root.ui-cards main>p.muted.aberto{display:block}
 :root.ui-cards .chip,:root.ui-cards .chips button{border-radius:12px}
 @media(min-width:761px){:root.ui-cards .tabs{grid-template-columns:repeat(8,1fr)}}
+/* ---- Estilo "Painel BI": indicadores no topo + listas em grade de cartões ---- */
+.bi-kpis{display:none}
+:root.ui-bi .bi-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:10px;margin:4px 0 14px;grid-column:1/-1}
+.bi-k{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:14px;padding:10px 12px;box-shadow:var(--shadow,0 1px 3px rgba(0,0,0,.06))}
+.bi-k b{display:block;font-size:24px;line-height:1.1;color:var(--accent)}.bi-k span{font-size:12px;color:var(--muted)}
+.bi-bars{grid-column:1/-1;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin-bottom:14px}
+.bi-bars h4{margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.bi-bar{display:grid;grid-template-columns:120px 1fr 30px;gap:8px;align-items:center;font-size:12.5px;margin:4px 0}.bi-bar i{height:10px;border-radius:5px;background:var(--accent);opacity:.8}.bi-bar em{font-style:normal;color:var(--muted);text-align:right}
+@media(min-width:761px){:root.ui-bi main{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;align-items:start}
+:root.ui-bi main>*{grid-column:1/-1}:root.ui-bi main :is(div,section):has(>details.item+details.item){display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;align-items:start}:root.ui-bi main :is(div,section):has(>details.item+details.item)>details.item{margin:0}:root.ui-bi main :is(div,section):has(>details.item+details.item)>details.item[open]{grid-column:1/-1}:root.ui-bi main>details.item{grid-column:auto;margin:0}:root.ui-bi main>details.item[open]{grid-column:1/-1}}
 #a11yDlg .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}#a11yDlg .btn{min-height:44px}#a11yDlg h3{margin:14px 0 6px}`;
   const st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
 
@@ -87,6 +97,7 @@ const Temas = (() => {
     if (t) r.dataset.theme = t; else delete r.dataset.theme;
     r.classList.toggle("hc", !!P.hc);
     r.classList.toggle("ui-cards", P.estilo !== "classico");
+    r.classList.toggle("ui-bi", P.estilo === "bi");
     if (document.body) document.body.style.zoom = P.zoom && P.zoom !== 1 ? P.zoom : "";
   }
   function escolher(t) {
@@ -121,7 +132,7 @@ const Temas = (() => {
       <h3>Tamanho da tela: ${z}%</h3>
       <div class="row"><button class="btn" data-a11y="menos" aria-label="Reduzir">A−</button><button class="btn" data-a11y="mais" aria-label="Ampliar">A+</button><button class="btn" data-a11y="restaurar">↺ Restaurar</button></div>
       <h3>Estilo</h3>
-      <div class="row"><button class="btn${P.estilo !== "classico" ? " pri" : ""}" data-a11y="cards">▦ Quadradinhos</button><button class="btn${P.estilo === "classico" ? " pri" : ""}" data-a11y="classico">☰ Clássico</button></div>
+      <div class="row"><button class="btn${!P.estilo || P.estilo === "cards" ? " pri" : ""}" data-a11y="cards">▦ Quadradinhos</button><button class="btn${P.estilo === "bi" ? " pri" : ""}" data-a11y="bi">📊 Painel BI</button><button class="btn${P.estilo === "classico" ? " pri" : ""}" data-a11y="classico">☰ Clássico</button></div>
       <h3>Leitura</h3>
       <div class="row"><button class="btn${P.hc ? " pri" : ""}" data-a11y="hc">◐ Alto contraste: ${P.hc ? "ligado" : "desligado"}</button>
       <button class="btn${P.tts ? " pri" : ""}" data-a11y="tts">🔊 Ler botões ao tocar: ${P.tts ? "ligado" : "desligado"}</button></div>
@@ -145,8 +156,10 @@ const Temas = (() => {
     if (a === "hc") P.hc = !P.hc;
     if (a === "cards") P.estilo = "cards";
     if (a === "classico") P.estilo = "classico";
+    if (a === "bi") P.estilo = "bi";
     if (a === "tts") { P.tts = !P.tts; if (P.tts) falar("Leitura de botões ligada"); }
     if (a !== "open") { salvaP(); aplicar(); }
+    if (["cards", "bi", "classico"].includes(a) && typeof DB !== "undefined" && DB) { V._keepScroll = true; render(); }
     janela();
   });
   document.addEventListener("change", e => { if (e.target.id === "cfgTema") escolher(e.target.value); });
