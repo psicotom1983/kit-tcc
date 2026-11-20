@@ -82,6 +82,8 @@ Todos os pedidos feitos até agora, com a situação de cada um.
 - 🧪 Painel extra do glossário (fora do kit): claude.ai/artifact/Y2umJ8VBQf2JHpM9rnz6ay
 - ⬜ Próximas leituras: livros de raiva, ACT completos, DSM-5-TR, Stahl, Emocionário, slides e minicursos
 - ⬜ Mais exemplos e "onde estudar" para as técnicas restantes
+- ⬜ Psicologia Familiar Sistêmica: técnicas, conceitos e glossário (com referências)
+- ⬜ Genograma: ferramenta para montar o genograma do paciente (símbolos padrão, relações) e imprimir
 
 ## Ideias para depois
 - ⏳ Área do paciente (fichas preenchidas entre sessões)
