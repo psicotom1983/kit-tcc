@@ -69,6 +69,10 @@ Todos os pedidos feitos até agora, com a situação de cada um.
 - ⬜ Folha em branco do RPD (impressão) no novo formato de 6 colunas
 - ⬜ Versão final: **Termos de uso / contrato de aceite** das condições
 
+## Pedidos de 19/11/2026
+- ⬜ Campos de texto (sessão e outros): botão **＋ / −** em cada quadrado; fechado mostra só ~2 linhas, ＋ abre o texto inteiro (crescendo junto com o texto), − volta a encolher
+- ⬜ Aguardando mais documentos do usuário para as próximas mudanças
+
 ## Ideias para depois
 - ⏳ Área do paciente (fichas preenchidas entre sessões)
 - ⏳ Transcrição de gravações já feitas (sem ser ao vivo)
