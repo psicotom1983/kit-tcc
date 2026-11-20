@@ -1,8 +1,8 @@
-﻿/* Kit ClÃ­nico TCC â€” service worker: permite abrir o app sem internet.
+/* Kit ClÃ­nico TCC â€” service worker: permite abrir o app sem internet.
    SÃ³ guarda os arquivos do APP (cÃ³digo e base de conhecimento) â€” nunca dados de pacientes. */
-const CACHE = "kit-tcc-v3.0";
-const SHELL = ["./", "index.html", "kb.js", "store.js", "ia.js", "temas.js", "app.js", "agenda.js", "rpd.js", "caso.js", "caderno.js", "voz.js", "manifest.webmanifest", "icon.svg", "icon-maskable.svg"];
-self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
+const CACHE = "kit-tcc-v3.1";
+const SHELL = ["./", "index.html", "kb.js", "store.js", "ia.js", "temas.js", "app.js", "agenda.js", "rpd.js", "caso.js", "ajuda.js", "termos.html", "caderno.js", "voz.js", "manifest.webmanifest", "icon.svg", "icon-maskable.svg"];
+self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL.map(u => new Request(u, { cache: "reload" })))).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 /* tocar no aviso abre (ou traz para frente) o kit */
 self.addEventListener("notificationclick", e => {
@@ -14,7 +14,7 @@ self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
   if (u.origin === location.origin) {
     /* rede primeiro (pega atualizaÃ§Ãµes), cache se estiver offline */
-    e.respondWith(fetch(e.request).then(r => { const cp = r.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); return r; }).catch(() => caches.match(e.request).then(r => r || caches.match("index.html"))));
+    e.respondWith(fetch(e.request, { cache: "no-cache" }).then(r => { const cp = r.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); return r; }).catch(() => caches.match(e.request).then(r => r || caches.match("index.html"))));
   } else if (u.hostname === "cdn.jsdelivr.net") {
     /* SDK da IA: cache depois do primeiro uso */
     e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => { const cp = res.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); return res; })));

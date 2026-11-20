@@ -177,8 +177,12 @@ const blankRows = (cols, n = 5) => Array.from({ length: n }, () => `<tr class="b
 
 const FICHAS = {
   rpd: () => `<p>Quando perceber que seu humor mudou, pergunte-se: <b>“O que estava passando pela minha cabeça agora?”</b></p>
-  <table><tr><th>Data / Situação</th><th>Pensamento automático<br><small>quanto acredito (0–100%)</small></th><th>Emoção<br><small>intensidade (0–100%)</small></th><th>Distorção</th><th>Resposta adaptativa<br><small>quanto acredito (0–100%)</small></th><th>Resultado<br><small>reavalie pensamento e emoção</small></th></tr>${blankRows(6)}</table>
-  <h3>Perguntas para encontrar a resposta adaptativa</h3><ol>${SOCRATICAS.map(q => `<li>${q}</li>`).join("")}</ol>`,
+  <table><tr><th>1. Situação<br><small>com quem, onde, quando</small></th><th>2. Pensamentos<br><small>quanto acredito (0–100%)</small></th><th>3. Emoções<br><small>intensidade (0–100%)</small></th><th>4. Comportamento<br><small>o que fiz</small></th><th>5. Resposta alternativa<br><small>quanto acredito (0–100%)</small></th><th>6. Resultado<br><small>reavalie pensamento e emoção</small></th></tr>${blankRows(6)}</table>
+  <h3>💛 Pergunta-chave para a coluna 5</h3><p><b>Se alguém de quem você gosta muito estivesse nessa situação e tivesse esse pensamento, o que você diria a essa pessoa?</b></p>
+  <h3>Outras perguntas que ajudam</h3><ol>${SOCRATICAS.map(q => `<li>${q}</li>`).join("")}</ol>`,
+  emopens: () => `<table><tr><th style="width:50%">🎭 Emoção</th><th>💭 Pensamento</th></tr><tr><td>Uma palavra</td><td>Uma frase</td></tr><tr><td>Triste, ansioso, com raiva, envergonhado, alegre</td><td>“Ela não gosta de mim”, “Vou falhar”</td></tr><tr><td>Tem intensidade (0–100%)</td><td>Tem grau de crença (0–100%)</td></tr></table>
+  <p>⚠️ “Eu <b>senti que</b> ninguém liga para mim” → isso é um <b>pensamento</b>. A emoção pode ser tristeza ou solidão.</p>
+  <h3>Pratique: separe emoção e pensamento</h3><table><tr><th>Situação</th><th>Emoção (%)</th><th>Pensamento</th></tr>${blankRows(4)}</table>`,
   distorcoes: () => `<p>Pensamentos automáticos costumam seguir alguns padrões. Reconhecê-los ajuda a se distanciar deles.</p><table>${DISTORCOES.map(d => `<tr><th style="width:32%">${d[0]}</th><td>${d[1]}</td></tr>`).join("")}</table>`,
   modelo: () => `<p style="font-size:14pt;text-align:center"><b>Situação</b> → <b>Pensamento automático</b> → <b>Emoção · Reação do corpo · Comportamento</b></p>
   <p>Não é a situação em si que determina como nos sentimos, mas o significado que damos a ela. Duas pessoas na mesma situação podem sentir coisas diferentes porque pensam coisas diferentes.</p>
@@ -348,6 +352,10 @@ const TECNICAS = [
     ind: "Dissociação, flashbacks, ansiedade intensa — trazer para o aqui e agora.",
     passos: ["Nomear 5 coisas que vê", "4 coisas que pode tocar", "3 sons que ouve", "2 cheiros", "1 sabor (ou algo bom sobre si)", "Dizer em voz alta data, local e que está seguro(a) agora"],
     refs: ["NAJ"] },
+  { id: "emopens", nome: "Psicoeducação: emoção x pensamento", ab: "TCC", ficha: "emopens",
+    ind: "Antes do RPD; quando o paciente mistura o que pensou com o que sentiu.",
+    passos: ["Emoção cabe em uma palavra: triste, ansioso, com raiva", "Pensamento é uma frase: “ela não gosta de mim”", "Alerta: “eu senti que…” quase sempre introduz um pensamento", "Treine com exemplos do próprio paciente: separe as duas colunas", "Peça a intensidade da emoção (0–100%)"],
+    refs: ["GP", "JB"] },
   /* ---- adicionadas a partir dos materiais do estágio (resumidas com palavras próprias) ---- */
   { id: "continuum", nome: "Continuum cognitivo", ab: "TCC", mat: "APLICAÇÃO DO CONTINUUM COGNITIVO.docx",
     ind: "Pensamento tudo-ou-nada (“sou incompetente”, “sou um fracasso”). Flexibiliza rótulos absolutos.",

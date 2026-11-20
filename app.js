@@ -2,7 +2,7 @@
    Kit Clínico TCC — APLICATIVO (v2)
    ===================================================================== */
 "use strict";
-const APP_VER = "3.0 (19/11/2026)"; /* mude a cada atualização, junto com o CACHE do sw.js */
+const APP_VER = "3.1 · 19/11/2026 22:09"; /* mude a cada atualização, junto com o CACHE do sw.js */
 /* ============================== utilidades ============================== */
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -173,8 +173,9 @@ function render() {
   const nav = [["pacientes", "👥 Pacientes"], ["agenda", "📅 Agenda"], ["protocolos", "🧭 Protocolos"], ["tecnicas", "🧰 Técnicas"], ["caderno", "📓 Caderno"], ["literatura", "📚 Literatura Científica"], ["etica", "⚖ Ética e CFP"], ["dados", "☁ Dados e backup"], ["config", "⚙ Configurações"]];
   const cur = V.page === "paciente" ? "pacientes" : V.page;
   applyPrefs();
-  app.innerHTML = `<header><span class="brand">🧠<span class="bt"> Kit Clínico TCC</span></span><span class="sp"></span>
+  app.innerHTML = `<header><span class="brand">🧠<span class="bt"> Kit Clínico TCC</span> <small class="ver">v${APP_VER}</small></span><span class="sp"></span>
     <button id="flag" class="flag" data-act="flag" title="Situação do salvamento — toque para detalhes"></button><span class="sp"></span>
+    <button class="btn sm" data-aj="abrir" title="Ajuda e dicas" aria-label="Ajuda e dicas">❓</button>
     <button class="btn sm" data-a11y="open" title="Acessibilidade e temas" aria-label="Acessibilidade e temas">Aa</button>
     <button class="btn sm" data-act="iaToggle" title="Assistente de IA">🤖<span class="bt"> IA</span></button>
     <button class="btn sm" data-act="nav" data-v="config" title="Configurações" aria-label="Configurações">⚙</button>
@@ -188,6 +189,7 @@ function render() {
   /* celular: mostra a aba/menu ativo (as barras rolam para o lado) */
   document.querySelectorAll("nav button.on, .tabs button.on").forEach(b => b.scrollIntoView({ inline: "center", block: "nearest" }));
   window.scrollTo(0, keep ? y : 0);
+  if (!DB.config.bemVindo) bvAgendar();
 }
 function page() {
   switch (V.page) {
@@ -1000,7 +1002,7 @@ function printDoc(title, html, who) {
   $("#print").innerHTML = `<h1>${esc(title)}</h1>${who ? `<p>${esc(who)} · ${fmt(today())}</p>` : ""}${html}<div class="foot">Kit Clínico TCC — material de apoio terapêutico.</div>`;
   window.print();
 }
-const FICHA_T = { rpd: "Registro de Pensamentos (RPD)", distorcoes: "Distorções cognitivas", modelo: "O modelo cognitivo", aware: "Quando a ansiedade vier: A.W.A.R.E.", respiracao: "Respiração diafragmática", neuro: "Entendendo a ansiedade", sono: "Reeducação do sono", cartao: "Cartões de enfrentamento", seta: "Seta descendente", atividades: "Monitoramento e agenda de atividades", mindfulness: "Atenção plena", tipp: "Habilidades para crises", plano: "Meu plano de segurança" };
+const FICHA_T = { emopens: "Emoção ou pensamento?", rpd: "Registro de Pensamentos (RPD)", distorcoes: "Distorções cognitivas", modelo: "O modelo cognitivo", aware: "Quando a ansiedade vier: A.W.A.R.E.", respiracao: "Respiração diafragmática", neuro: "Entendendo a ansiedade", sono: "Reeducação do sono", cartao: "Cartões de enfrentamento", seta: "Seta descendente", atividades: "Monitoramento e agenda de atividades", mindfulness: "Atenção plena", tipp: "Habilidades para crises", plano: "Meu plano de segurança" };
 
 /* ============================== ações ============================== */
 document.addEventListener("keydown", e => {
@@ -1150,7 +1152,12 @@ window.addEventListener("online", () => { if (DB && DB.config.driveOn) scheduleS
 
 /* ============================== início ============================== */
 (async function init() {
-  if ("serviceWorker" in navigator && GDrive.originOk()) navigator.serviceWorker.register("sw.js").catch(() => {});
+  if ("serviceWorker" in navigator && GDrive.originOk()) {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+    /* versão nova instalada: recarrega uma vez, só se não houver nada por salvar */
+    let recarregou = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => { if (!recarregou && !(typeof SYNC !== "undefined" && SYNC.local.st === "pend")) { recarregou = true; location.reload(); } });
+  }
   try { VAULT_BLOB = await Store.loadVault(); } catch (e) { VAULT_BLOB = lsGet(LS2) || lsGet(LS1); }
   if (VAULT_BLOB) { try { const o = JSON.parse(VAULT_BLOB); if (!o.v || o.v === 1) LOCK_MSG = "Encontrei seus dados da versão anterior. Digite sua senha: eles serão convertidos para a v2 e você receberá um <b>código de recuperação</b>."; } catch (e) {} }
   render();

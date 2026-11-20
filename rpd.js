@@ -66,7 +66,7 @@ const RPD_AJUDA = `<h2 style="margin-top:0">Emoção ou pensamento?</h2>
 <p>⚠️ Dica: quando dizemos <b>“eu senti que…”</b>, quase sempre o que vem depois é um <b>pensamento</b>. “Senti que ninguém ligava para mim” → o pensamento é “ninguém liga para mim”; a emoção pode ser tristeza ou solidão.</p>
 <p>Pergunta que ajuda: <b>“Consigo dizer isso em uma palavra?”</b> Se sim, provavelmente é emoção. Se precisa de uma frase, é pensamento.</p>
 <p class="ref">Greenberger, D.; Padesky, C. A. A mente vencendo o humor. 2. ed. Porto Alegre: Artmed, 2017. · Beck, J. S. Terapia cognitivo-comportamental: teoria e prática. 3. ed. Porto Alegre: Artmed, 2022.</p>
-<div class="row" style="justify-content:flex-end"><button class="btn pri" data-rpd="fechar">Entendi</button></div>`;
+<div class="row" style="justify-content:flex-end"><button class="btn" data-act="ficha" data-v="emopens">🖨 Folha para o paciente</button><button class="btn pri" data-rpd="fechar">Entendi</button></div>`;
 
 (() => {
   const st = document.createElement("style");
