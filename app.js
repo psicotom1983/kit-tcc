@@ -2,7 +2,7 @@
    Kit Clínico TCC — APLICATIVO (v2)
    ===================================================================== */
 "use strict";
-const APP_VER = "2.9 (19/11/2026)"; /* mude a cada atualização, junto com o CACHE do sw.js */
+const APP_VER = "3.0 (19/11/2026)"; /* mude a cada atualização, junto com o CACHE do sw.js */
 /* ============================== utilidades ============================== */
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -818,7 +818,7 @@ function tecHTML(t) {
     ${t.passos ? `<ol>${String(t.passos).split("\n").filter(Boolean).map(x => `<li>${esc(x)}</li>`).join("")}</ol>` : ""}
     ${semRef(t) ? `<div class="alert danger">⚠ Sem referência científica. <a href="#" data-act="tecEdit" data-v="${esc(t.id)}">Completar agora</a></div>` : `<b class="ref">Referências</b><p class="ref">${nl(t.refs)}</p>`}`;
   return `<div class="row" style="justify-content:space-between"><h2 style="margin:0">${esc(t.nome)}</h2><span class="badge accent">${esc(t.ab)}</span></div>
-  <p><b>Quando usar:</b> ${esc(t.ind)}</p><ol>${t.passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
+  <p><b>Quando usar:</b> ${esc(t.ind)}</p><ol>${t.passos.map(x => `<li>${esc(x)}</li>`).join("")}</ol>${t.mat ? `<p class="ref">📁 Material de apoio (sua pasta do estágio): ${esc(t.mat)}</p>` : ""}
   ${t.cuid ? `<div class="alert warn"><b>Cuidado:</b> ${esc(t.cuid)}</div>` : ""}
   <b class="ref">Referências</b>${refList(t.refs)}
   ${t.ficha ? `<button class="btn" data-act="ficha" data-v="${t.ficha}">🖨 Imprimir ficha para o paciente</button>` : ""}`;

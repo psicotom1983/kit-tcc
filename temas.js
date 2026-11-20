@@ -153,6 +153,35 @@ const Temas = (() => {
   /* textos de introdução ficam em 2 linhas; toque para ler tudo */
   document.addEventListener("click", e => { const t = e.target.closest(".ui-cards main>p.muted"); if (t && !e.target.closest("a,button")) t.classList.toggle("aberto"); });
 
+  /* ---------- ＋ / − nos quadrados de texto: fechado mostra 2 linhas; ＋ abre tudo ---------- */
+  const ABERTOS = new Set(), chave = ta => (ta.dataset.o || "") + "|" + (ta.dataset.f || ta.id || "");
+  const cresce = ta => { ta.style.height = "auto"; ta.style.height = (ta.scrollHeight + 4) + "px"; };
+  const stx = document.createElement("style");
+  stx.textContent = `.exp-w{position:relative;display:block}textarea.enc{height:3.5em!important;min-height:0!important;overflow:hidden;resize:none}
+.exp{position:absolute;right:6px;top:6px;width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--accent);font-weight:700;font-size:17px;line-height:1;cursor:pointer;z-index:2}
+.exp-w textarea{padding-right:80px!important}.exp-w .dit{top:6px;bottom:auto;right:42px;width:30px;height:30px;font-size:14px}`;
+  document.head.appendChild(stx);
+  function prepara() {
+    document.querySelectorAll("textarea:not([data-exp]):not(#iaIn)").forEach(ta => {
+      ta.dataset.exp = "1";
+      const w = document.createElement("span"); w.className = "exp-w"; ta.parentNode.insertBefore(w, ta); w.appendChild(ta);
+      const b = document.createElement("button"); b.type = "button"; b.className = "exp"; w.appendChild(b);
+      const k = chave(ta);
+      if (ABERTOS.has(k)) { b.textContent = "−"; b.title = "Encolher"; requestAnimationFrame(() => cresce(ta)); }
+      else { ta.classList.add("enc"); b.textContent = "+"; b.title = "Mostrar todo o texto"; }
+      b.setAttribute("aria-label", b.title);
+    });
+  }
+  document.addEventListener("click", e => {
+    const b = e.target.closest(".exp"); if (!b) return; e.preventDefault(); e.stopPropagation();
+    const ta = b.parentNode.querySelector("textarea"), k = chave(ta);
+    if (ta.classList.contains("enc")) { ta.classList.remove("enc"); ABERTOS.add(k); cresce(ta); b.textContent = "−"; b.title = "Encolher"; }
+    else { ta.classList.add("enc"); ta.style.height = ""; ABERTOS.delete(k); b.textContent = "+"; b.title = "Mostrar todo o texto"; }
+    b.setAttribute("aria-label", b.title);
+  }, true);
+  document.addEventListener("input", e => { const ta = e.target; if (ta.tagName === "TEXTAREA" && ta.dataset.exp && !ta.classList.contains("enc")) cresce(ta); });
+  let tp; new MutationObserver(() => { clearTimeout(tp); tp = setTimeout(prepara, 50); }).observe(document.documentElement, { childList: true, subtree: true });
+
   aplicar();
   document.addEventListener("DOMContentLoaded", () => aplicar());
   return { aplicar, opcoes };

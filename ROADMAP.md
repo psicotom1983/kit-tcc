@@ -70,8 +70,8 @@ Todos os pedidos feitos até agora, com a situação de cada um.
 - ⬜ Versão final: **Termos de uso / contrato de aceite** das condições
 
 ## Pedidos de 19/11/2026
-- ⬜ Campos de texto (sessão e outros): botão **＋ / −** em cada quadrado; fechado mostra só ~2 linhas, ＋ abre o texto inteiro (crescendo junto com o texto), − volta a encolher
-- ⬜ Aguardando mais documentos do usuário para as próximas mudanças
+- 🧪 Campos de texto (sessão e outros): botão **＋ / −** em cada quadrado; fechado mostra só ~2 linhas, ＋ abre o texto inteiro (crescendo junto com o texto), − volta a encolher
+- 🧪 Materiais do estágio viraram 11 técnicas novas (continuum, preocupação produtiva, custos da ansiedade, pizza da responsabilidade, checklist de problemas, assertividade, “dia perfeito”, auto-observação, psicoeducação do pânico, metáforas, baralhos), ligadas aos protocolos
 
 ## Ideias para depois
 - ⏳ Área do paciente (fichas preenchidas entre sessões)
