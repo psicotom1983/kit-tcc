@@ -85,6 +85,11 @@ Todos os pedidos feitos até agora, com a situação de cada um.
 - 🧪 Psicologia Familiar Sistêmica: técnicas, conceitos e glossário (com referências)
 - 🧪 Genograma (aba 🌳 Família): ferramenta para montar o genograma do paciente (símbolos padrão, relações) e imprimir
 
+## Pedidos de 22/11/2026
+- ⬜ **Página inicial** (tela de entrada do kit) com todos os botões em quadradinhos: Pacientes, Agenda, Protocolos, Técnicas, Caderno, Estudo, Literatura, Ética, Dados, Configurações
+- ⬜ Na página inicial: boas-vindas curtas, "o que é o kit" e acesso à Ajuda
+- ⬜ **Pesquisa geral** no kit (busca em técnicas, protocolos, glossário, casos e literatura de psicologia)
+
 ## Ideias para depois
 - ⏳ Área do paciente (fichas preenchidas entre sessões)
 - ⏳ Transcrição de gravações já feitas (sem ser ao vivo)
