@@ -1,7 +1,7 @@
 /* Kit ClÃ­nico TCC â€” service worker: permite abrir o app sem internet.
    SÃ³ guarda os arquivos do APP (cÃ³digo e base de conhecimento) â€” nunca dados de pacientes. */
-const CACHE = "kit-tcc-v3.3";
-const SHELL = ["./", "index.html", "kb.js", "store.js", "ia.js", "temas.js", "estudo.js", "app.js", "agenda.js", "rpd.js", "caso.js", "ajuda.js", "termos.html", "caderno.js", "voz.js", "manifest.webmanifest", "icon.svg", "icon-maskable.svg"];
+const CACHE = "kit-tcc-v3.4";
+const SHELL = ["./", "index.html", "kb.js", "store.js", "ia.js", "temas.js", "estudo.js", "app.js", "agenda.js", "rpd.js", "caso.js", "geno.js", "ajuda.js", "termos.html", "caderno.js", "voz.js", "manifest.webmanifest", "icon.svg", "icon-maskable.svg"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL.map(u => new Request(u, { cache: "reload" })))).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 /* tocar no aviso abre (ou traz para frente) o kit */

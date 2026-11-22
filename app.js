@@ -2,7 +2,7 @@
    Kit Clínico TCC — APLICATIVO (v2)
    ===================================================================== */
 "use strict";
-const APP_VER = "3.3 · 20/11/2026 00:26"; /* mude a cada atualização, junto com o CACHE do sw.js */
+const APP_VER = "3.4 · 22/11/2026 00:23"; /* mude a cada atualização, junto com o CACHE do sw.js */
 /* ============================== utilidades ============================== */
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -387,8 +387,8 @@ function pgPacientes() {
 /* ---------- paciente ---------- */
 function pgPaciente() {
   const p = P(); if (!p) { V.page = "pacientes"; return pgPacientes(); }
-  const tabs = [["direcao", "🧭 Direcionamento"], ["sessoes", `🗓 Sessões (${p.sessoes.length})`], ["conc", "🧩 Conceituação"], ["registros", "📝 RPD · Seta · AWARE"], ["risco", "⚠️ Risco"], ["docs", `📎 Documentos (${p.docs.length})`], ["evol", "📈 Evolução"], ["dados", "🪪 Cadastro"]];
-  const body = { direcao: tabDirecao, sessoes: tabSessoes, conc: tabConc, registros: tabRegistros, risco: tabRisco, docs: tabDocs, evol: tabEvol, dados: tabCadastro }[V.tab] || tabDirecao;
+  const tabs = [["direcao", "🧭 Direcionamento"], ["sessoes", `🗓 Sessões (${p.sessoes.length})`], ["conc", "🧩 Conceituação"], ["familia", "🌳 Família"], ["registros", "📝 RPD · Seta · AWARE"], ["risco", "⚠️ Risco"], ["docs", `📎 Documentos (${p.docs.length})`], ["evol", "📈 Evolução"], ["dados", "🪪 Cadastro"]];
+  const body = { direcao: tabDirecao, sessoes: tabSessoes, conc: tabConc, familia: tabFamilia, registros: tabRegistros, risco: tabRisco, docs: tabDocs, evol: tabEvol, dados: tabCadastro }[V.tab] || tabDirecao;
   return `<div class="ph"><button class="btn sm" data-act="nav" data-v="pacientes">← Pacientes</button><h1 id="pTitle">${esc(p.codigo || "(sem código)")}</h1>
   ${p.demandas.map(d => PRO[d] ? `<span class="badge ${PRO[d].cor}">${esc(PRO[d].nome)}</span>` : "").join("")}<span class="sp"></span><button class="btn sm" data-act="agNovo" data-v="${today()}" data-pid="${p.id}">📅 Agendar</button><button class="btn sm" data-caso="print">🖨 Imprimir caso</button></div>
   ${(() => { const now = new Date(), o = agOcc(now, new Date(now.getTime() + 60 * 86400000)).find(x => x.ev.pid === p.id); return o ? `<p class="ref" style="margin:-4px 0 6px">Próximo atendimento: <b>${DSEM[o.start.getDay()]} ${fmt(o.date)} às ${esc(o.ev.hora)}</b></p>` : ""; })()}

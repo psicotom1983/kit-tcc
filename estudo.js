@@ -24,6 +24,37 @@ Object.assign(REF, {
   GOLL99: "Gollwitzer, P. M. (1999). Implementation intentions: strong effects of simple plans. American Psychologist, 54(7), 493–503."
 });
 
+/* ---- Psicologia Familiar Sistêmica ---- */
+Object.assign(REF, {
+  MGP: "McGoldrick, M., Gerson, R., & Petry, S. (2012). Genogramas: avaliação e intervenção familiar (3ª ed.). Artmed.",
+  CMG: "Carter, B., & McGoldrick, M. (Orgs.). (1995). As mudanças no ciclo de vida familiar: uma estrutura para a terapia familiar (2ª ed.). Artes Médicas.",
+  MINU: "Minuchin, S. (1982). Famílias: funcionamento e tratamento. Artes Médicas.",
+  BOWEN: "Bowen, M. (1978). Family therapy in clinical practice. Jason Aronson.",
+  NS07: "Nichols, M. P., & Schwartz, R. C. (2007). Terapia familiar: conceitos e métodos (7ª ed.). Artmed.",
+  SELV80: "Selvini Palazzoli, M., Boscolo, L., Cecchin, G., & Prata, G. (1980). Hypothesizing—circularity—neutrality: three guidelines for the conductor of the session. Family Process, 19(1), 3–12.",
+  TOMM88: "Tomm, K. (1988). Interventive interviewing: Part III. Intending to ask lineal, circular, strategic, or reflexive questions? Family Process, 27(1), 1–15.",
+  WWF74: "Watzlawick, P., Weakland, J. H., & Fisch, R. (1974). Change: principles of problem formation and problem resolution. W. W. Norton.",
+  BNS73: "Boszormenyi-Nagy, I., & Spark, G. M. (1973). Invisible loyalties: reciprocity in intergenerational family therapy. Harper & Row.",
+  WL12: "Wright, L. M., & Leahey, M. (2012). Enfermeiras e famílias: um guia para avaliação e intervenção na família (5ª ed.). Roca.",
+  SATIR: "Satir, V. (1988). The new peoplemaking. Science and Behavior Books."
+});
+if (!ABORDAGENS.includes("Sistêmica")) ABORDAGENS.push("Sistêmica");
+TECNICAS.push(
+  { id: "genograma", nome: "Genograma", ab: "Sistêmica", ind: "Conhecer a família em 3 gerações: estrutura, relações, padrões que se repetem.",
+    passos: ["Comece pelo paciente e o núcleo atual", "Suba para pais e avós; desça para filhos", "Registre idades, falecimentos, uniões e separações", "Marque relações: próxima, distante, conflito, rompimento", "Pergunte por padrões: doenças, vícios, segredos, papéis repetidos", "Construa junto com o paciente (aba 🌳 Família)"], refs: ["MGP"] },
+  { id: "ecomapa", nome: "Ecomapa (rede de apoio)", ab: "Sistêmica", ind: "Ver os recursos e tensões fora da família.",
+    passos: ["Desenhe a família no centro", "Ao redor: escola, trabalho, saúde, religião, amigos, lazer", "Linhas: forte, fraca ou estressante; setas mostram a direção da energia", "Pergunte: quem ajuda? onde há conflito? o que falta?"], refs: ["WL12"] },
+  { id: "circular", nome: "Perguntas circulares", ab: "Sistêmica", ind: "Sair do “culpado” e ver o padrão da relação.",
+    passos: ["Pergunte sobre diferenças: “quem fica mais triste quando o pai bebe?”", "Pergunte sobre efeitos: “quando ela se fecha, o que a mãe faz?”", "Peça a um membro para descrever a relação de outros dois", "Compare antes e depois: “isso era diferente antes do divórcio?”"], refs: ["SELV80", "TOMM88"] },
+  { id: "reenquadre", nome: "Reenquadramento / conotação positiva", ab: "Sistêmica", ind: "Famílias presas a rótulos (“ele é o problema”).",
+    passos: ["Escute a descrição negativa", "Procure a intenção ou função positiva do comportamento", "Devolva com novo sentido: “o filho briga para manter os pais unidos contra ele”", "Observe se a família aceita o novo olhar"], refs: ["WWF74", "NS07"] },
+  { id: "ciclovida", nome: "Ciclo de vida familiar", ab: "Sistêmica", ind: "Crises de transição (casamento, filhos, adolescência, saída de casa, aposentadoria).",
+    passos: ["Identifique a fase atual da família", "Veja as tarefas esperadas da fase", "Note se a família está “travada” na fase anterior", "Normalize a crise como parte da transição"], refs: ["CMG"] },
+  { id: "estrutural", nome: "Mapa estrutural (fronteiras e hierarquia)", ab: "Sistêmica", ind: "Filhos parentalizados, alianças entre gerações, famílias emaranhadas ou desligadas.",
+    passos: ["Identifique subsistemas: casal, pais, irmãos", "Fronteiras: rígidas (distância), difusas (mistura) ou claras", "Quem decide? A hierarquia está clara?", "Intervenha reforçando o subsistema parental"], refs: ["MINU"] },
+  { id: "escultura", nome: "Escultura familiar", ab: "Sistêmica", ind: "Tornar visíveis as relações sem depender só de palavras.",
+    passos: ["Peça a um membro que posicione os outros como se fossem estátuas", "Distância e postura mostram proximidade e poder", "Pergunte a cada um como se sente na posição", "Peça a escultura “ideal” e compare"], refs: ["SATIR", "NS07"] }
+);
 /* onde estudar: [ref, local] · exemplo curto de diálogo/aplicação */
 const ESTUDO = {
   seta: { ex: "P: “Vou errar na apresentação.” T: “Se errasse, o que isso significaria?” P: “Que vão rir de mim.” T: “E se rissem, o que diria sobre você?” P: “Que sou um fracasso.” → crença central (desvalor).",
@@ -76,7 +107,9 @@ const ESTUDO = {
   recaida: { ler: [["JB21", "cap. 21"], ["T101", "técnica 23, p. 50"], ["GP", "cap. 16, p. 271"]] },
   panicoed: { ler: [["CMR", "cap. 1, p. 30"], ["T101", "técnica 85, p. 141 (luta e fuga)"]] },
   aware: { ler: [["JB21", "apêndice C — Passos na técnica AWARE"]] },
-  checklist: { ler: [["BDES", "cap. 7, p. 137 (metas)"]] }
+  checklist: { ler: [["BDES", "cap. 7, p. 137 (metas)"]] },
+  genograma: { ex: "Pedro (15) ⭐ no centro; pais divorciados (//); avô materno falecido (✕). Linha de conflito pai–Pedro e linha próxima mãe–Pedro: triângulo.", ler: [["MGP", "livro inteiro (símbolos, entrevista e interpretação)"]] },
+  circular: { ex: "“Quando o Pedro briga na escola, quem fica mais preocupado: a mãe ou o pai? E o que o outro faz?”", ler: [["SELV80", "artigo"], ["TOMM88", "artigo"]] }
 };
 function tecEstudo(t) {
   const e = ESTUDO[t.id]; if (!e) return "";
@@ -316,3 +349,21 @@ function biDecorar() {
   } else return;
   m.insertAdjacentHTML("afterbegin", `<div class="bi-kpis">${h}</div>`);
 }
+
+/* conteúdo sistêmico que depende de CASOS e GLOSS */
+CASOS.push({ id: "c-fam", dem: ["desregulacao"], titulo: "Família Souza — “O problema é o Pedro”", perfil: "Pedro, 15 anos, brigas na escola; pais em conflito há anos; avô materno faleceu há 1 ano.",
+  queixa: "Pais trazem o filho como “o problema”.", cc: "(leitura sistêmica) O sintoma do Pedro desvia o foco do conflito do casal.", ci: "Mãe e Pedro aliados contra o pai; fronteira difusa mãe–filho.",
+  pa: "Mãe: “ele é igual ao pai”. Pai: “ela mima demais”.", comp: "Brigas escalam quando os pais discutem; Pedro piora perto de datas do avô.",
+  metas: ["Reduzir ocorrências escolares de 4 para 1 por mês em 10 semanas", "Pais combinarem 1 regra em conjunto por semana"],
+  tec: ["genograma", "circular", "reenquadre", "estrutural", "ciclovida"],
+  aprendizado: "Na visão sistêmica, o “paciente identificado” carrega a tensão do sistema. O genograma revela o luto não elaborado e o triângulo." });
+GLOSS.push(
+  ["Paciente identificado", "Sistêmica", "Membro da família apontado como “o problema”.", "Lembrar que o sintoma expressa o sistema.", ["NS07"]],
+  ["Homeostase familiar", "Sistêmica", "Tendência da família a manter seu equilíbrio, mesmo disfuncional.", "Entender resistências à mudança.", ["NS07"]],
+  ["Circularidade", "Sistêmica", "Cada comportamento é causa e efeito ao mesmo tempo.", "Sair da busca por culpados.", ["SELV80"]],
+  ["Triangulação", "Sistêmica", "Um terceiro é puxado para aliviar a tensão de uma dupla.", "Identificar alianças e conflitos desviados.", ["BOWEN"]],
+  ["Diferenciação do self", "Sistêmica", "Capacidade de ter opinião própria e manter vínculo sem se fundir.", "Meta da terapia boweniana.", ["BOWEN"]],
+  ["Fronteiras", "Sistêmica", "Regras de quem participa do quê: rígidas, difusas ou claras.", "Avaliar estrutura e hierarquia.", ["MINU"]],
+  ["Lealdades invisíveis", "Sistêmica", "Compromissos inconscientes com a família de origem.", "Entender repetições entre gerações.", ["BNS73"]],
+  ["Transmissão transgeracional", "Sistêmica", "Padrões que passam de uma geração a outra.", "Ler o genograma.", ["MGP", "BOWEN"]]
+);
