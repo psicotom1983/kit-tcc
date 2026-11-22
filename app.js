@@ -2,7 +2,7 @@
    Kit Clínico TCC — APLICATIVO (v2)
    ===================================================================== */
 "use strict";
-const APP_VER = "3.6 · 22/11/2026 00:38"; /* mude a cada atualização, junto com o CACHE do sw.js */
+const APP_VER = "3.7 · 22/11/2026 16:26"; /* mude a cada atualização, junto com o CACHE do sw.js */
 /* ============================== utilidades ============================== */
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -25,7 +25,7 @@ const isMobile = () => matchMedia("(max-width: 760px)").matches;
 
 /* ============================== estado ============================== */
 let DB = null, LAST_BLOB = null, VAULT_BLOB = null, LOCK_MSG = "";
-let V = { page: "pacientes", pid: null, tab: "direcao" };
+let V = { page: "inicio", pid: null, tab: "direcao" };
 const R = {}; let rc = 0;
 const reg = o => { const k = "o" + (rc++); R[k] = o; return k; };
 const SYNC = { local: { st: "ok", t: 0 }, drive: { st: "off", t: 0 }, pasta: { st: "off", t: 0 } };
@@ -170,18 +170,19 @@ function render() {
   const app = $("#app");
   if (!DB) { document.body.classList.remove("ia-open"); app.innerHTML = lockScreen(); setTimeout(() => $("#pw") && !isMobile() && $("#pw").focus(), 30); return; }
   const y = window.scrollY, keep = V._keepScroll; V._keepScroll = false;
-  const nav = [["pacientes", "👥 Pacientes"], ["agenda", "📅 Agenda"], ["protocolos", "🧭 Protocolos"], ["tecnicas", "🧰 Técnicas"], ["caderno", "📓 Caderno"], ["estudo", "🎓 Estudo"], ["literatura", "📚 Literatura Científica"], ["etica", "⚖ Ética e CFP"], ["dados", "☁ Dados e backup"], ["config", "⚙ Configurações"]];
+  const nav = [["inicio", "🏠 Início"], ["pacientes", "👥 Pacientes"], ["agenda", "📅 Agenda"], ["protocolos", "🧭 Protocolos"], ["tecnicas", "🧰 Técnicas"], ["caderno", "📓 Caderno"], ["estudo", "🎓 Estudo"], ["literatura", "📚 Literatura Científica"], ["etica", "⚖ Ética e CFP"], ["dados", "☁ Dados e backup"], ["config", "⚙ Configurações"]];
   const cur = V.page === "paciente" ? "pacientes" : V.page;
   applyPrefs();
   app.innerHTML = `<header><span class="brand">🧠<span class="bt"> Kit Clínico TCC</span> <small class="ver">v${APP_VER}</small></span><span class="sp"></span>
     <button id="flag" class="flag" data-act="flag" title="Situação do salvamento — toque para detalhes"></button><span class="sp"></span>
     <button class="btn sm" data-aj="abrir" title="Ajuda e dicas" aria-label="Ajuda e dicas">❓</button>
-    <button class="btn sm" data-a11y="open" title="Acessibilidade e temas" aria-label="Acessibilidade e temas">Aa</button>
+    <button class="btn sm" data-a11y="temas" title="Temas e estilo" aria-label="Temas e estilo">🎨</button>
+    <button class="btn sm" data-a11y="open" title="Acessibilidade" aria-label="Acessibilidade">♿</button>
     <button class="btn sm" data-act="iaToggle" title="Assistente de IA">🤖<span class="bt"> IA</span></button>
     <button class="btn sm" data-act="nav" data-v="config" title="Configurações" aria-label="Configurações">⚙</button>
     <button class="btn sm" data-act="lock" title="Bloquear">🔒</button></header>
   <button id="gBanner" class="banner bad" data-act="gConnect" title="Tudo continua salvo neste aparelho" hidden>↻ Reconectar Google</button>
-  <div class="wrap"><nav>${nav.map(([id, t]) => `<button class="${cur === id ? "on" : ""}" data-act="nav" data-v="${id}">${t.replace(/^(\S+) (\S+)(.*)$/, '<i class="ni">$1</i> $2<span class="nr">$3</span>')}</button>`).join("")}</nav>
+  <div class="wrap"><nav><button class="nav-tog" data-navtog title="Recolher / abrir o menu" aria-label="Recolher ou abrir o menu">☰</button>${nav.map(([id, t]) => `<button class="${cur === id ? "on" : ""}" data-act="nav" data-v="${id}" title="${t.replace(/^\S+ /, "")}">${t.replace(/^(\S+) (\S+)(.*)$/, '<i class="ni">$1</i> <span class="nl">$2<span class="nr">$3</span></span>')}</button>`).join("")}</nav>
   <main>${page()}</main></div>
   <button class="fab" data-act="saveNow" title="Salvar agora (Ctrl+S) — o kit também salva sozinho">💾 Salvar</button>`;
   renderFlag(); renderRecBar();
@@ -203,6 +204,7 @@ function page() {
     case "agenda": return pgAgenda();
     case "literatura": return pgLiteratura();
     case "caderno": return pgCaderno();
+    case "inicio": return pgInicio();
     case "estudo": return pgEstudo();
     case "casos": return pgCasos();
     case "glossario": return pgGlossario();
@@ -239,7 +241,7 @@ function lockScreen() {
   ${GDrive.live() ? `<p class="ref" style="text-align:center">☁ Google conectado</p>` : `<button class="btn big" data-act="gLoginLock" ${g ? "" : "disabled"}>☁ Entrar com Google</button>`}
   ${g ? "" : `<p class="ref" style="margin:4px 0 0">O login com Google precisa ser configurado uma vez (⚙ Configurações). <a href="#" data-act="gCfgLock">Configurar agora</a></p>`}
   <button class="btn big" data-act="openFile" style="margin-top:8px">📂 Abrir arquivo / backup (.tcc)</button>
-  <button class="btn big" data-a11y="open" style="margin-top:8px">Aa Acessibilidade e temas</button>
+  <div class="row" style="gap:8px;margin-top:8px"><button class="btn big" style="flex:1" data-a11y="temas">🎨 Temas</button><button class="btn big" style="flex:1" data-a11y="open">♿ Acessibilidade</button></div>
   <p class="ref" style="margin-top:14px">Esqueceu a senha? Use o código de recuperação. Sem senha <i>e</i> sem código, ninguém consegue ler os dados — nem você.</p>
   <p class="ref">v${APP_VER}</p></div></div>`;
 }

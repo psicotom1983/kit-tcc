@@ -319,13 +319,16 @@ function pgGlossario() {
 /* ---- 📊 Estilo Painel BI: indicadores do topo de cada tela ---- */
 function biDecorar() {
   if (!document.documentElement.classList.contains("ui-bi") || !DB) return;
-  const m = document.querySelector("main"); if (!m || m.querySelector(".bi-kpis")) return;
+  const m = document.querySelector("main"); if (!m) return; m.dataset.pg = V.page; if (m.querySelector(".bi-kpis")) return;
   const K = (n, l) => `<div class="bi-k"><b>${n}</b><span>${l}</span></div>`;
   const B = (tit, obj) => { const E = Object.entries(obj).sort((a, b) => b[1] - a[1]), mx = Math.max(1, ...E.map(e => e[1]));
     return `<div class="bi-bars"><h4>${tit}</h4>${E.map(([k, v]) => `<div class="bi-bar"><span>${esc(k)}</span><i style="width:${v / mx * 100}%"></i><em>${v}</em></div>`).join("")}</div>`; };
   const pg = V.page, ps = DB.pacientes; let h = "";
   const freq = L => { const a = L.filter(s => !s.presenca || s.presenca === "Compareceu").length, f = L.filter(s => s.presenca === "Falta" || s.presenca === "Falta justificada").length; return a + f ? Math.round(a / (a + f) * 100) + "%" : "—"; };
-  if (pg === "pacientes" && V.pid) {
+  if (pg === "inicio") {
+    const all = ps.flatMap(p => p.sessoes);
+    h = K(ps.length, "pacientes") + K(all.filter(s => !s.presenca || s.presenca === "Compareceu").length, "sessões") + K(TECNICAS.length, "técnicas") + K(glossTodos().length, "termos");
+  } else   if (pg === "pacientes" && V.pid) {
     const p = ps.find(x => x.id === V.pid); if (!p) return; const ss = p.sessoes;
     const ult = [...ss].reverse().find(s => s.humor !== "" && s.humor != null);
     h = K(ss.filter(s => !s.presenca || s.presenca === "Compareceu").length, "sessões") + K(ss.filter(s => (s.presenca || "").startsWith("Falta")).length, "faltas") + K(freq(ss), "frequência") + K(ult ? ult.humor : "—", "último humor") + K(p.rpd.length, "RPDs");

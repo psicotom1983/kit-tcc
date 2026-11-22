@@ -86,11 +86,13 @@ Todos os pedidos feitos até agora, com a situação de cada um.
 - 🧪 Genograma (aba 🌳 Família): ferramenta para montar o genograma do paciente (símbolos padrão, relações) e imprimir
 
 ## Pedidos de 22/11/2026
-- ⬜ **Página inicial** (tela de entrada do kit) com todos os botões em quadradinhos: Pacientes, Agenda, Protocolos, Técnicas, Caderno, Estudo, Literatura, Ética, Dados, Configurações
-- ⬜ Na página inicial: boas-vindas curtas, "o que é o kit" e acesso à Ajuda
-- ⬜ **Pesquisa geral** no kit (busca em técnicas, protocolos, glossário, casos e literatura de psicologia)
-- ⬜ Topo: trocar o botão **Aa** por dois — **🎨 Temas** (paleta de pintor colorida: temas e estilo) e **♿ Acessibilidade** (tamanho, alto contraste, ler botões)
-- ⬜ **Menu lateral flutuante** (computador): sempre visível ao rolar a tela, com botão para recolher/abrir (só ícones quando recolhido)
+- 🧪 **Página inicial** (tela de entrada do kit) com todos os botões em quadradinhos: Pacientes, Agenda, Protocolos, Técnicas, Caderno, Estudo, Literatura, Ética, Dados, Configurações
+- 🧪 Na página inicial: boas-vindas curtas, "o que é o kit" e acesso à Ajuda
+- 🧪 **Pesquisa geral** no kit (busca em técnicas, protocolos, glossário, casos e literatura de psicologia)
+- 🧪 Topo: trocar o botão **Aa** por dois — **🎨 Temas** (paleta de pintor colorida: temas e estilo) e **♿ Acessibilidade** (tamanho, alto contraste, ler botões)
+- 🧪 **Menu lateral flutuante** (computador): sempre visível ao rolar a tela, com botão para recolher/abrir (só ícones quando recolhido)
+- 🧪 Estilo Painel BI refeito: todas as telas com indicadores no topo e listas em quadrados (cartões com ícone)
+- 🧪 Celular: menu de baixo com Início, Pacientes, Agenda, Protocolos, Técnicas, Caderno e Estudo; Literatura, Ética, Dados e Configurações ficam nos quadradinhos do Início
 
 ## Ideias para depois
 - ⏳ Área do paciente (fichas preenchidas entre sessões)

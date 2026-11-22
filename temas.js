@@ -75,10 +75,33 @@ const Temas = (() => {
 :root.ui-bi .bi-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:10px;margin:4px 0 14px;grid-column:1/-1}
 .bi-k{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:14px;padding:10px 12px;box-shadow:var(--shadow,0 1px 3px rgba(0,0,0,.06))}
 .bi-k b{display:block;font-size:24px;line-height:1.1;color:var(--accent)}.bi-k span{font-size:12px;color:var(--muted)}
+@media(max-width:760px){:root.ui-bi .bi-kpis{grid-template-columns:repeat(4,1fr);gap:6px}.bi-k{padding:6px 8px;border-left-width:3px}.bi-k b{font-size:18px}.bi-k span{font-size:10.5px;line-height:1.2;display:block}}
 .bi-bars{grid-column:1/-1;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin-bottom:14px}
 .bi-bars h4{margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
 .bi-bar{display:grid;grid-template-columns:120px 1fr 30px;gap:8px;align-items:center;font-size:12.5px;margin:4px 0}.bi-bar i{height:10px;border-radius:5px;background:var(--accent);opacity:.8}.bi-bar em{font-style:normal;color:var(--muted);text-align:right}
-@media(min-width:761px){:root.ui-bi main{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;align-items:start}
+/* tiles: toda lista de cartões vira grade de quadrados */
+:root.ui-bi main{max-width:1400px}
+:root.ui-bi main :is(div,section,main):has(>details.item+details.item){display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;align-items:stretch}
+@media(min-width:761px){:root.ui-bi main :is(div,section,main):has(>details.item+details.item){grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}}
+:root.ui-bi main :has(>details.item+details.item)>details.item{margin:0}
+:root.ui-bi main :has(>details.item+details.item)>details.item[open]{grid-column:1/-1}
+:root.ui-bi main:has(>details.item+details.item){display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;align-content:start;align-items:stretch}
+@media(min-width:761px){:root.ui-bi main:has(>details.item+details.item){grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}}
+:root.ui-bi main:has(>details.item+details.item)>:not(details.item){grid-column:1/-1}
+:root.ui-bi main:has(>details.item+details.item)>details.item{margin:0}:root.ui-bi main:has(>details.item+details.item)>details.item[open]{grid-column:1/-1}
+:root.ui-bi main[data-pg="literatura"] :has(>details.item+details.item),:root.ui-bi main[data-pg="literatura"]:has(>details.item+details.item){grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+:root.ui-bi details.item{border-radius:16px;border-top:4px solid var(--accent);background:var(--panel);box-shadow:var(--shadow,0 1px 3px rgba(0,0,0,.08))}
+:root.ui-bi details.item>summary{list-style:none;display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-height:92px;padding:14px 16px;font-weight:700;line-height:1.3}
+:root.ui-bi details.item>summary::-webkit-details-marker{display:none}
+:root.ui-bi details.item>summary::before{content:var(--ic,"▦");font-size:22px;font-weight:400}
+:root.ui-bi details.item[open]>summary{min-height:0;flex-direction:row;align-items:center;border-bottom:1px solid var(--line)}
+:root.ui-bi details.item>summary .sum-meta,:root.ui-bi details.item>summary .badge{font-weight:400;font-size:12px}
+:root.ui-bi main[data-pg="tecnicas"]{--ic:"🧰"}:root.ui-bi main[data-pg="protocolos"]{--ic:"🧭"}:root.ui-bi main[data-pg="casos"]{--ic:"🗂"}:root.ui-bi main[data-pg="glossario"]{--ic:"📖"}
+:root.ui-bi main[data-pg="caderno"]{--ic:"📝"}:root.ui-bi main[data-pg="etica"]{--ic:"⚖️"}:root.ui-bi main[data-pg="pacientes"]{--ic:"🗓"}:root.ui-bi main[data-pg="literatura"]{--ic:"📚"}
+:root.ui-bi .card{border-radius:16px;border-left:4px solid var(--accent);box-shadow:var(--shadow,0 1px 3px rgba(0,0,0,.08))}
+:root.ui-bi .plist{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:0}
+:root.ui-bi .plist>li{border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:16px;background:var(--panel);padding:12px 14px;list-style:none;box-shadow:var(--shadow,0 1px 3px rgba(0,0,0,.08))}
+:root.ui-bi h1{font-size:1.35em}
 :root.ui-bi main>*{grid-column:1/-1}:root.ui-bi main :is(div,section):has(>details.item+details.item){display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;align-items:start}:root.ui-bi main :is(div,section):has(>details.item+details.item)>details.item{margin:0}:root.ui-bi main :is(div,section):has(>details.item+details.item)>details.item[open]{grid-column:1/-1}:root.ui-bi main>details.item{grid-column:auto;margin:0}:root.ui-bi main>details.item[open]{grid-column:1/-1}}
 #a11yDlg .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}#a11yDlg .btn{min-height:44px}#a11yDlg h3{margin:14px 0 6px}`;
   const st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
@@ -123,26 +146,30 @@ const Temas = (() => {
   }, true);
 
   /* ---------- janela "Aa" ---------- */
-  function janela() {
+  let MODO = "a11y";
+  function janela(modo) {
+    if (modo) MODO = modo;
     let d = document.getElementById("a11yDlg");
     if (!d) { d = document.createElement("dialog"); d.id = "a11yDlg"; document.body.appendChild(d); d.addEventListener("click", ev => { if (ev.target === d) d.close(); }); }
     const z = Math.round((P.zoom || 1) * 100), grupos = {};
     L.forEach(([id, n, g]) => (grupos[g] = grupos[g] || []).push(`<option value="${id}">${n}</option>`));
-    d.innerHTML = `<h2 style="margin-top:0">Aa Acessibilidade e temas</h2>
-      <h3>Tamanho da tela: ${z}%</h3>
-      <div class="row"><button class="btn" data-a11y="menos" aria-label="Reduzir">A−</button><button class="btn" data-a11y="mais" aria-label="Ampliar">A+</button><button class="btn" data-a11y="restaurar">↺ Restaurar</button></div>
+    d.innerHTML = MODO === "temas" ? `<h2 style="margin-top:0">🎨 Temas e estilo</h2>
       <h3>Estilo</h3>
       <div class="row"><button class="btn${!P.estilo || P.estilo === "cards" ? " pri" : ""}" data-a11y="cards">▦ Quadradinhos</button><button class="btn${P.estilo === "bi" ? " pri" : ""}" data-a11y="bi">📊 Painel BI</button><button class="btn${P.estilo === "classico" ? " pri" : ""}" data-a11y="classico">☰ Clássico</button></div>
-      <h3>Leitura</h3>
-      <div class="row"><button class="btn${P.hc ? " pri" : ""}" data-a11y="hc">◐ Alto contraste: ${P.hc ? "ligado" : "desligado"}</button>
-      <button class="btn${P.tts ? " pri" : ""}" data-a11y="tts">🔊 Ler botões ao tocar: ${P.tts ? "ligado" : "desligado"}</button></div>
       <h3>Tema</h3>
       <select id="a11yTema" style="width:100%"><option value="">Automático (do aparelho)</option><option value="light">Claro</option><option value="dark">Escuro</option><option value="mes">📅 Tema do mês (muda sozinho)</option>
       ${Object.entries(grupos).map(([g, o]) => `<optgroup label="${g}">${o.join("")}</optgroup>`).join("")}</select>
-      <p class="ref" style="margin:6px 0 0">Os temas e a acessibilidade valem só para este aparelho.</p>
+      <p class="ref" style="margin:6px 0 0">Os temas valem só para este aparelho.</p>
+      <div class="row" style="justify-content:flex-end;margin-top:14px"><button class="btn pri" data-a11y="fechar">Fechar</button></div>`
+      : `<h2 style="margin-top:0">♿ Acessibilidade</h2>
+      <h3>Tamanho da tela: ${z}%</h3>
+      <div class="row"><button class="btn" data-a11y="menos" aria-label="Reduzir">A−</button><button class="btn" data-a11y="mais" aria-label="Ampliar">A+</button><button class="btn" data-a11y="restaurar">↺ Restaurar</button></div>
+      <h3>Leitura</h3>
+      <div class="row"><button class="btn${P.hc ? " pri" : ""}" data-a11y="hc">◐ Alto contraste: ${P.hc ? "ligado" : "desligado"}</button>
+      <button class="btn${P.tts ? " pri" : ""}" data-a11y="tts">🔊 Ler botões ao tocar: ${P.tts ? "ligado" : "desligado"}</button></div>
+      <p class="ref" style="margin:6px 0 0">Vale só para este aparelho.</p>
       <div class="row" style="justify-content:flex-end;margin-top:14px"><button class="btn pri" data-a11y="fechar">Fechar</button></div>`;
-    d.querySelector("#a11yTema").value = tema();
-    d.querySelector("#a11yTema").onchange = ev => escolher(ev.target.value);
+    if (MODO === "temas") { d.querySelector("#a11yTema").value = tema(); d.querySelector("#a11yTema").onchange = ev => escolher(ev.target.value); }
     if (!d.open) d.showModal();
   }
   document.addEventListener("click", e => {
@@ -158,9 +185,9 @@ const Temas = (() => {
     if (a === "classico") P.estilo = "classico";
     if (a === "bi") P.estilo = "bi";
     if (a === "tts") { P.tts = !P.tts; if (P.tts) falar("Leitura de botões ligada"); }
-    if (a !== "open") { salvaP(); aplicar(); }
+    if (a !== "open" && a !== "temas") { salvaP(); aplicar(); }
     if (["cards", "bi", "classico"].includes(a) && typeof DB !== "undefined" && DB) { V._keepScroll = true; render(); }
-    janela();
+    janela(a === "temas" ? "temas" : a === "open" ? "a11y" : undefined);
   });
   document.addEventListener("change", e => { if (e.target.id === "cfgTema") escolher(e.target.value); });
   /* textos de introdução ficam em 2 linhas; toque para ler tudo */
