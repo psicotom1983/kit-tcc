@@ -90,6 +90,7 @@ Todos os pedidos feitos até agora, com a situação de cada um.
 - ⬜ Na página inicial: boas-vindas curtas, "o que é o kit" e acesso à Ajuda
 - ⬜ **Pesquisa geral** no kit (busca em técnicas, protocolos, glossário, casos e literatura de psicologia)
 - ⬜ Topo: trocar o botão **Aa** por dois — **🎨 Temas** (paleta de pintor colorida: temas e estilo) e **♿ Acessibilidade** (tamanho, alto contraste, ler botões)
+- ⬜ **Menu lateral flutuante** (computador): sempre visível ao rolar a tela, com botão para recolher/abrir (só ícones quando recolhido)
 
 ## Ideias para depois
 - ⏳ Área do paciente (fichas preenchidas entre sessões)
