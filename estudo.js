@@ -448,3 +448,56 @@ TECNICAS.push(
 GLOSS.push(["Lapso x recaída", "Sessão", "Lapso é um deslize pontual; recaída é a volta persistente ao padrão antigo.", "Ensinar a ler o lapso como aprendizado, não como “voltei à estaca zero”.", ["MG85", "JB21"]]);
 ESTUDO.recaida = ESTUDO.recaida || {}; ESTUDO.recaida.ex = "“Tive uma crise depois de 2 meses bem. Isso é um lapso: o que disparou? O que funcionou antes? Qual o 1º passo do meu plano?”";
 ESTUDO.recaida.ler = (ESTUDO.recaida.ler || []).concat([["MG85", "modelo cognitivo-comportamental da recaída"]]);
+/* ---- leitura de 22/11 (2ª parte): livros escaneados (OCR do sumário) e minicursos ---- */
+Object.assign(REF, {
+  LIPP: "Lipp, M. E. N., & Malagris, L. E. N. (2013). O treino cognitivo de controle da raiva: o passo a passo do tratamento. Cognitiva.",
+  FERR: "Ferreira, F. G. Raiva (Coleção Sentimentos). [livro infantil]",
+  APA06: "APA Presidential Task Force on Evidence-Based Practice. (2006). Evidence-based practice in psychology. American Psychologist, 61(4), 271–285.",
+  RUSH77: "Rush, A. J., Beck, A. T., Kovacs, M., & Hollon, S. (1977). Comparative efficacy of cognitive therapy and pharmacotherapy in the treatment of depressed outpatients. Cognitive Therapy and Research, 1(1), 17–37.",
+  HAYES04: "Hayes, S. C. (2004). Acceptance and commitment therapy, relational frame theory, and the third wave of behavioral and cognitive therapies. Behavior Therapy, 35(4), 639–665.",
+  SUP: "Santos, L. L. Minicursos “Introdução à TCC” e “TCC na prática” (material de supervisão do estágio)."
+});
+const PROR = PROTOCOLOS.find(p => p.id === "raiva"); if (PROR && !PROR.refs.includes("LIPP")) PROR.refs.unshift("LIPP");
+TECNICAS.push({ id: "primeiras", nome: "As três primeiras sessões", ab: "TCC", mat: "Guia_Pratico_Tres_Primeiras_Sessoes_TCC.docx",
+  ind: "Início do atendimento; quando a anamnese vira interrogatório e a demanda não aparece.",
+  passos: ["Sessão 1 — identificar a demanda: por que agora? frequência, intensidade, prejuízo, expectativas e segurança", "Sessão 2 — entender o funcionamento: situações concretas, pensamentos, emoções, corpo, comportamentos e consequências", "Sessão 3 — integrar: síntese provisória validada com o paciente, o que falta avaliar e primeira direção", "Lembre: a anamnese é recurso, não objetivo da sessão"],
+  refs: ["JB21", "NDP"] });
+Object.assign(ESTUDO, {
+  primeiras: { ex: "“Quero entender o que está acontecendo e o que fez você buscar terapia agora. O que está mais difícil neste momento?”", ler: [["JB21", "caps. 5 e 6 — Avaliação e primeira sessão"], ["NDP", "cap. 4, p. 53 — Miniformulações"]] },
+  plano: { ex: "1. Meus sinais de alerta · 2. O que faço sozinho para me acalmar · 3. Pessoas e lugares que distraem · 4. Quem posso chamar · 5. Profissionais e CVV 188 · 6. Tornar o ambiente seguro.", ler: [["SB12", "artigo original do plano de segurança"], ["WBB", "terapia cognitiva para pacientes suicidas"]] },
+  sono: { ex: "Diário de 2 semanas → tempo na cama = tempo médio dormido (mín. 5 h) · cama só para dormir · se não dormir em ~20 min, levante e volte com sono.", ler: [["ME03", "guia clínico"], ["RIEM", "diretriz europeia"]] },
+  neuro: { ex: "“A amígdala é um alarme de incêndio sensível: toca com fumaça de torrada. O alarme é real; o incêndio, nem sempre.”", ler: [["LEDOUX", "o cérebro emocional"], ["CB12", "modelo cognitivo da ansiedade"]] },
+  grounding: { ex: "Nomeie 5 coisas que vê, 4 que toca, 3 que ouve, 2 cheiros e 1 sabor. Fale em voz alta, devagar.", ler: [["NAJ", "Seeking Safety"]] },
+  diaperfeito: { ex: "“Vou estudar quando estiver animado” → “Abro o livro 10 minutos às 19h, com ou sem vontade.”", ler: [["JB21", "cap. 7 — Programação de atividades"], ["T101", "técnica 09, p. 23 (autorrecompensa)"]] },
+  autoobs: { ler: [["T101", "técnicas 32 e 78, p. 62 e 132 (automonitoramento e autorregistro)"], ["WELLS09", "terapia metacognitiva"]] },
+  metaforas: { ler: [["HSW", "uso de metáforas na ACT"], ["SUP", "infográficos do estágio"]] },
+  baralhos: { ler: [["CANT", "folhas de resposta por transtorno"]] },
+  ecomapa: { ex: "Família no centro; linha grossa para a igreja (apoio forte), tracejada para a escola (fraca), zigue-zague para o trabalho do pai (estresse).", ler: [["WL12", "avaliação familiar"]] },
+  reenquadre: { ex: "“Ele é teimoso” → “Ele tem muita determinação; como ajudá-lo a usar isso a favor dele?”", ler: [["WWF74", "mudança de segunda ordem"], ["NS07", "terapias estratégicas"]] },
+  ciclovida: { ler: [["CMG", "livro inteiro (fases e tarefas)"]] },
+  estrutural: { ler: [["MINU", "famílias: funcionamento e tratamento"], ["NS07", "terapia estrutural"]] },
+  escultura: { ler: [["SATIR", "vivências familiares"], ["NS07", "terapias experienciais"]] },
+  yogaresp: { ex: "Sente-se reto, tampe a narina direita, inspire pela esquerda (4 s); troque, expire pela direita (6 s). 10 ciclos.", ler: [["BG05", "revisão clínica"]] },
+  yoga: { ler: [["CRAMER13", "metanálise em depressão"], ["STREETER10", "GABA e humor"]] },
+  smart: { ex: "Vago: “quero me sentir melhor”. SMART: “sair de casa para caminhar 20 min, 3 vezes por semana, nas próximas 4 semanas”.", ler: [["LL02", "teoria das metas"], ["T101", "técnica 16, p. 35 (roda da vida)"]] },
+  pdca: { ex: "P: dormir às 23h · D: testar 1 semana · C: dormi 4 de 7 noites · A: tirar o celular do quarto e repetir.", ler: [["DEMING", "ciclo PDCA"]] },
+  swot: { ex: "Forças: organizada · Fraquezas: medo de falar em público · Oportunidades: vaga interna · Ameaças: prazo curto → usar a organização para preparar a entrevista.", ler: [["GUREL", "revisão teórica"]] },
+  w5h2: { ex: "O quê: caminhar · Por quê: humor · Onde: praça · Quando: seg/qua/sex 7h · Quem: eu e minha irmã · Como: tênis separado na véspera · Quanto: 20 min.", ler: [["GOLL99", "intenções de implementação"]] },
+  eisenhower: { ler: [["COVEY", "hábito 3"], ["T101", "técnica 02, p. 14 (tomando decisões)"]] },
+  matrizdec: { ler: [["KT81", "análise de decisão"], ["T101", "técnica 02, p. 14"], ["DZ71", "solução de problemas"]] },
+  gut: { ler: [["KT81", "priorização de problemas"]] }
+});
+Object.assign(ESTUDO.termometro, { ler: ESTUDO.termometro.ler.concat([["LIPP", "cap. 5, p. 72 (TCCR) e anexo A, p. 132 (apostila do participante)"], ["FERR", "para crianças: o corpo na raiva"]]) });
+Object.assign(ESTUDO.pausa, { ler: ESTUDO.pausa.ler.concat([["LIPP", "cap. 7, p. 100 — o tratamento passo a passo"]]) });
+ESTUDO.socratico.ler = ESTUDO.socratico.ler.map(x => x[0] === "WALT" ? ["WALT", "caps. 4 (diálogo socrático beckiano), 5–8 (foco, compreensão, curiosidade, síntese) e 16 (método autossocrático)"] : x);
+ESTUDO.rpd.ler.push(["WALT", "cap. 10 — Registros de pensamento e experimentos"]);
+ESTUDO.experimentos.ler.push(["WALT", "cap. 10"]);
+ESTUDO.crencas.ler.push(["WALT", "cap. 11 — Crenças centrais e esquemas"]);
+ESTUDO.dcc.ler = ESTUDO.dcc.ler.map(x => x[0] === "NDP" ? ["NDP", "caps. 2 (formulação na TCC), 6 (adultos), 7 (crianças, p. 91), 10 (casos difíceis, p. 119) e 11 (formulação do tratamento)"] : x);
+GLOSS.push(
+  ["Prática baseada em evidências (PBE)", "Conceitos", "Decisão clínica que une a melhor evidência científica, a experiência do terapeuta e as características e preferências do paciente.", "Escolher a abordagem pelo problema, não por gosto pessoal.", ["APA06", "SUP"]],
+  ["Ondas das terapias cognitivo-comportamentais", "Conceitos", "1ª onda: comportamental; 2ª: cognitiva (Beck, Ellis); 3ª: contextuais (ACT, DBT, mindfulness).", "Entender o “guarda-chuva das TCCs”.", ["HAYES04", "SUP"]],
+  ["Avaliação diagnóstica", "Sessão", "Queixa, sintomas, duração e curso, prejuízo, diagnóstico diferencial, histórico, contexto cultural, risco e funcionamento global.", "O diagnóstico é ponto de partida; a formulação explica o caso.", ["DSM", "SUP"]],
+  ["Trauma (clínico)", "Ansiedade", "Evento que excede a capacidade de lidar, somado a sintomas posteriores (revivescência, evitação, alerta).", "Diferenciar trauma de sofrimento e estresse comuns.", ["DSM", "SUP"]],
+  ["Eficácia da TCC", "Conceitos", "Testada desde 1977 (primeiro ensaio em depressão); hoje com evidência para muitos transtornos.", "Fundamentar a escolha da abordagem.", ["RUSH77", "JB21"]]
+);
