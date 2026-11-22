@@ -2,7 +2,7 @@
    Kit Clínico TCC — APLICATIVO (v2)
    ===================================================================== */
 "use strict";
-const APP_VER = "3.4 · 22/11/2026 00:23"; /* mude a cada atualização, junto com o CACHE do sw.js */
+const APP_VER = "3.5 · 22/11/2026 00:25"; /* mude a cada atualização, junto com o CACHE do sw.js */
 /* ============================== utilidades ============================== */
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));

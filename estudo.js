@@ -367,3 +367,84 @@ GLOSS.push(
   ["Lealdades invisíveis", "Sistêmica", "Compromissos inconscientes com a família de origem.", "Entender repetições entre gerações.", ["BNS73"]],
   ["Transmissão transgeracional", "Sistêmica", "Padrões que passam de uma geração a outra.", "Ler o genograma.", ["MGP", "BOWEN"]]
 );
+
+/* ---- leitura de 22/11: raiva, ACT, DSM-5-TR e psicofarmacologia ---- */
+Object.assign(REF, {
+  MARTIN: "Martin, R. (2023). Desconstruindo a raiva: como usar a raiva para mudanças positivas. Astral Cultural. [e-book]",
+  LOHMANN: "Lohmann, R. C. (2009). The anger workbook for teens. New Harbinger.",
+  DTA07: "DiGiuseppe, R., & Tafrate, R. C. (2007). Understanding anger disorders. Oxford University Press.",
+  NOVACO: "Novaco, R. W. (1975). Anger control: the development and evaluation of an experimental treatment. Lexington Books.",
+  SABAN: "Saban, M. T. (2015). Introdução à terapia de aceitação e compromisso (2ª ed.). Artesã.",
+  TIRCH19: "Tirch, D., Silberstein-Tirch, L. R., Codd III, R. T., Brock, M. J., & Wright, M. J. (2019). Experiencing ACT from the inside out: a self-practice/self-reflection workbook for therapists. Guilford Press. [trad. bras. disponível]",
+  STAHL: "Stahl, S. M. (2019). Fundamentos de psicofarmacologia de Stahl: guia de prescrição (6ª ed.). Artmed."
+});
+TECNICAS.push(
+  { id: "termometro", nome: "Termômetro da raiva", ab: "TCC", ind: "Raiva intensa, explosões; perceber a raiva antes de “explodir”.",
+    passos: ["Desenhe um termômetro de 0 a 10", "Liste sinais do corpo e pensamentos em cada nível (ex.: 3 = mandíbula tensa; 7 = voz alta)", "Combine o ponto de parada (ex.: 5) para usar uma estratégia", "Registre na semana em que nível percebeu e o que fez"],
+    refs: ["DTA07", "MARTIN"] },
+  { id: "pausa", nome: "Pausa estratégica (time-out)", ab: "Comportamental", ind: "Brigas que escalam; risco de agressão verbal ou física.",
+    passos: ["Combine antes, com calma, o sinal de pausa (“preciso de 20 minutos”)", "Saia do local sem bater porta nem última palavra", "Faça algo que acalme: caminhar, respirar; evite ruminar e álcool", "Volte no horário combinado para conversar"],
+    refs: ["DTA07", "NOVACO"] },
+  { id: "iceberg", nome: "Iceberg da raiva", ab: "TCC", ind: "Psicoeducação: a raiva costuma proteger emoções mais vulneráveis.",
+    passos: ["Desenhe o iceberg: a raiva fica na ponta", "Embaixo: medo, mágoa, vergonha, rejeição, cansaço, injustiça", "Pergunte: “o que mais você sentiu, por baixo da raiva?”", "Trabalhe a emoção de baixo (validação, RPD, assertividade)"],
+    refs: ["MARTIN", "LTN"] },
+  { id: "contratoraiva", nome: "Contrato de manejo da raiva", ab: "Comportamental", ind: "Adolescentes e famílias; combinar sinais e ajuda.",
+    passos: ["Liste seus sinais de que a raiva está subindo", "Escolha o que a outra pessoa pode fazer para ajudar (ex.: lembrar da pausa)", "Combine o que você vai fazer (estratégia)", "Assinem e revisem nas sessões"],
+    refs: ["LOHMANN"] }
+);
+PROTOCOLOS.push({ id: "raiva", nome: "Raiva / agressividade", cor: "warn", kw: "raiva|irrita|explod|explos|agressiv|brigo|perco a cabe|estourad",
+  aval: ["Frequência, intensidade e duração dos episódios; gatilhos; consequências (relações, trabalho, justiça)", "Rastrear risco de violência, violência doméstica, uso de álcool/drogas e autolesão", "Diferenciar raiva como emoção (normal) de comportamento agressivo (alvo)", "📖 DSM-5-TR: Seção II — Transtornos disruptivos, do controle de impulsos e da conduta (ex.: transtorno explosivo intermitente)"],
+  instr: ["Registro de episódios de raiva (gatilho, pensamento, nível 0–10, ação, consequência)"],
+  fases: [
+    { n: "1. Avaliação e motivação", foco: "Mapear episódios, custos e benefícios de mudar; contrato.", t: ["custos", "contratoraiva"] },
+    { n: "2. Psicoeducação", foco: "Função da raiva; iceberg; ciclo de escalada.", t: ["iceberg", "psicoed"] },
+    { n: "3. Regulação no momento", foco: "Perceber cedo e parar a escalada.", t: ["termometro", "pausa", "respiracao", "rmp"] },
+    { n: "4. Reestruturação", foco: "Pensamentos de “deveria”, injustiça e hostilidade.", t: ["rpd", "socratico", "distorcoes"] },
+    { n: "5. Habilidades", foco: "Assertividade e resolução de problemas.", t: ["assertiv", "resolucao"] },
+    { n: "6. Manutenção", foco: "Prevenção de recaída.", t: ["recaida"] }
+  ],
+  cuid: ["Se há violência contra parceiro(a), crianças ou idosos: priorize segurança e avalie notificação e rede de proteção.", "Terapia de casal não é indicada enquanto houver violência ativa."],
+  refs: ["DTA07", "MARTIN", "NOVACO", "DSM"] });
+/* DSM-5-TR: onde ler os critérios de cada protocolo */
+const DSM_SEC = { depressao: "Transtornos depressivos", tag: "Transtornos de ansiedade", panico: "Transtornos de ansiedade", social: "Transtornos de ansiedade", toc: "Transtorno obsessivo-compulsivo e transtornos relacionados", tept: "Transtornos relacionados a trauma e a estressores", insonia: "Transtornos do sono-vigília", desregulacao: "Transtornos da personalidade (borderline)", suicidio: "Seção III — Condições para estudos posteriores (comportamento suicida)" };
+PROTOCOLOS.forEach(p => { if (DSM_SEC[p.id] && !p.aval.some(a => a.startsWith("📖 DSM"))) p.aval.push("📖 DSM-5-TR: " + (DSM_SEC[p.id].startsWith("Seção") ? "" : "Seção II — ") + DSM_SEC[p.id] + ""); });
+CASOS.push({ id: "c-rai", dem: ["raiva"], titulo: "Diego, 38 — “Eu explodo e depois me arrependo”", perfil: "Motorista; brigas no trânsito e em casa; esposa ameaçou separação.",
+  queixa: "Explosões verbais 3–4 vezes por semana, quebra objetos.", cc: "As pessoas me desrespeitam (mundo); sou fraco se não reagir.", ci: "Se eu não reagir, vão me fazer de bobo. As pessoas deveriam respeitar as regras.",
+  pa: "“Ele fez de propósito.” “Ninguém me respeita.”", comp: "Grita, buzina, xinga; depois se isola e sente culpa.",
+  metas: ["Reduzir explosões de 4 para 1 por semana em 10 semanas", "Usar a pausa combinada em 80% das discussões em 8 semanas"],
+  tec: ["iceberg", "termometro", "pausa", "rpd", "assertiv", "contratoraiva"],
+  aprendizado: "A raiva protege emoções vulneráveis (humilhação, medo de perder a família). Avalie sempre segurança da família." });
+GLOSS.push(
+  ["Raiva", "Emoções", "Emoção natural diante de ofensa, injustiça ou ameaça; prepara para agir.", "Proteger limites. O alvo da terapia é o comportamento agressivo, não a emoção.", ["MARTIN", "DTA07"]],
+  ["Hexaflex (ACT)", "ACT", "Os 6 processos da flexibilidade: aceitação, desfusão, momento presente, eu como contexto, valores e ação comprometida.", "Mapear onde o paciente está rígido.", ["HSW", "SABAN"]],
+  ["Teoria dos Quadros Relacionais (RFT)", "ACT", "Teoria da linguagem que fundamenta a ACT: aprendemos a relacionar palavras e eventos.", "Explica por que pensamentos ganham tanto poder.", ["SABAN"]]
+);
+/* psicofarmacologia: para o psicólogo entender o que o paciente usa (não prescreve) */
+[["Fluoxetina", "ISRS (antidepressivo)", 313], ["Sertralina", "ISRS (antidepressivo)", 695], ["Escitalopram", "ISRS (antidepressivo)", 269], ["Paroxetina", "ISRS (antidepressivo)", 589],
+ ["Venlafaxina", "IRSN (antidepressivo)", 797], ["Desvenlafaxina", "IRSN (antidepressivo)", 219], ["Duloxetina", "IRSN (antidepressivo e dor)", 263], ["Bupropiona", "Antidepressivo (noradrenalina e dopamina)", 121],
+ ["Mirtazapina", "Antidepressivo (sono e apetite)", 503], ["Trazodona", "Antidepressivo (muito usado para sono)", 755], ["Amitriptilina", "Antidepressivo tricíclico", 39],
+ ["Clonazepam", "Benzodiazepínico (ansiolítico)", 171], ["Alprazolam", "Benzodiazepínico (ansiolítico)", 25], ["Diazepam", "Benzodiazepínico (ansiolítico)", 229], ["Zolpidem", "Hipnótico (sono)", 827],
+ ["Quetiapina", "Antipsicótico atípico", 645], ["Aripiprazol", "Antipsicótico atípico", 67], ["Lítio", "Estabilizador do humor", 409], ["Lamotrigina", "Estabilizador do humor", 385]]
+ .forEach(([n, c, pg]) => GLOSS.push([n, "Medicamentos", c + ". Informação para entender o tratamento do paciente; quem prescreve e ajusta é o médico.", "Saber efeitos esperados e colaterais para conversar com o paciente e o psiquiatra (Stahl, p. " + pg + ").", ["STAHL"]]));
+Object.assign(ESTUDO, {
+  termometro: { ex: "Nível 3: mandíbula tensa → respirar. Nível 5: voz alta → pausa combinada. Nível 8: vontade de quebrar algo → sair do local.", ler: [["DTA07", "modelo de episódio de raiva"], ["MARTIN", "caps. 10 e 11 — Entender e administrar a raiva"]] },
+  iceberg: { ler: [["MARTIN", "caps. 2 e 4 — Por que ficamos com raiva; pensamento raivoso"]] },
+  pausa: { ler: [["DTA07", "intervenções de evitação/fuga planejada"]] },
+  contratoraiva: { ler: [["LOHMANN", "workbook para adolescentes"]] }
+});
+["desfusao", "valores", "custos", "mindfulness"].forEach(id => { ESTUDO[id] = ESTUDO[id] || {}; ESTUDO[id].ler = (ESTUDO[id].ler || []).concat([["SABAN", "Parte I, p. 17–27 (RFT, fusão, aceitação, escolha, ação)"], ["TIRCH19", "autoprática para o terapeuta"]]); });
+/* ---- slides do estágio: decisão e recaída ---- */
+Object.assign(REF, {
+  KT81: "Kepner, C. H., & Tregoe, B. B. (1981). The new rational manager. Princeton Research Press.",
+  MG85: "Marlatt, G. A., & Gordon, J. R. (1985). Relapse prevention: maintenance strategies in the treatment of addictive behaviors. Guilford Press. [ed. bras.: Prevenção de recaída, Artmed, 1993]",
+  DZ71: "D'Zurilla, T. J., & Goldfried, M. R. (1971). Problem solving and behavior modification. Journal of Abnormal Psychology, 78(1), 107–126."
+});
+TECNICAS.push(
+  { id: "matrizdec", nome: "Matriz de decisão", ab: "Outras áreas", ind: "Dúvida entre várias opções com muitos fatores (emprego, mudança, relacionamento).",
+    passos: ["Liste as opções nas linhas", "Liste os critérios nas colunas (o que importa para você)", "Dê peso a cada critério (1 a 5)", "Dê nota a cada opção em cada critério e multiplique pelo peso", "Some e discuta: o resultado combina com o que você sente? Por quê?"], refs: ["KT81", "DZ71"] },
+  { id: "gut", nome: "Matriz GUT (Gravidade, Urgência, Tendência)", ab: "Outras áreas", ind: "Muitos problemas ao mesmo tempo; decidir por onde começar.",
+    passos: ["Liste os problemas", "Dê nota de 1 a 5 para Gravidade, Urgência e Tendência (piorar se nada for feito)", "Multiplique G × U × T", "Comece pelo maior número"], refs: ["KT81"] }
+);
+GLOSS.push(["Lapso x recaída", "Sessão", "Lapso é um deslize pontual; recaída é a volta persistente ao padrão antigo.", "Ensinar a ler o lapso como aprendizado, não como “voltei à estaca zero”.", ["MG85", "JB21"]]);
+ESTUDO.recaida = ESTUDO.recaida || {}; ESTUDO.recaida.ex = "“Tive uma crise depois de 2 meses bem. Isso é um lapso: o que disparou? O que funcionou antes? Qual o 1º passo do meu plano?”";
+ESTUDO.recaida.ler = (ESTUDO.recaida.ler || []).concat([["MG85", "modelo cognitivo-comportamental da recaída"]]);

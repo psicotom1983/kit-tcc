@@ -80,10 +80,10 @@ Todos os pedidos feitos até agora, com a situação de cada um.
 - 🧪 Casos parecidos no Direcionamento do paciente
 - 🧪 Técnicas de outras áreas: yoga, metas SMART, PDCA, SWOT, 5W2H, matriz de prioridades
 - 🧪 Painel extra do glossário (fora do kit): claude.ai/artifact/Y2umJ8VBQf2JHpM9rnz6ay
-- ⬜ Próximas leituras: livros de raiva, ACT completos, DSM-5-TR, Stahl, Emocionário, slides e minicursos
+- 🧪 Lidos: raiva (protocolo novo), ACT (Saban, Tirch), DSM-5-TR (seções nos protocolos), Stahl (glossário de medicamentos), slides (matriz de decisão, GUT, lapso x recaída). ⬜ Faltam: minicursos (arquivos muito grandes), livros escaneados sem texto e baralhos
 - ⬜ Mais exemplos e "onde estudar" para as técnicas restantes
-- ⬜ Psicologia Familiar Sistêmica: técnicas, conceitos e glossário (com referências)
-- ⬜ Genograma: ferramenta para montar o genograma do paciente (símbolos padrão, relações) e imprimir
+- 🧪 Psicologia Familiar Sistêmica: técnicas, conceitos e glossário (com referências)
+- 🧪 Genograma (aba 🌳 Família): ferramenta para montar o genograma do paciente (símbolos padrão, relações) e imprimir
 
 ## Ideias para depois
 - ⏳ Área do paciente (fichas preenchidas entre sessões)
