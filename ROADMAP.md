@@ -94,6 +94,11 @@ Todos os pedidos feitos até agora, com a situação de cada um.
 - 🧪 Estilo Painel BI refeito: todas as telas com indicadores no topo e listas em quadrados (cartões com ícone)
 - 🧪 Celular: menu de baixo com Início, Pacientes, Agenda, Protocolos, Técnicas, Caderno e Estudo; Literatura, Ética, Dados e Configurações ficam nos quadradinhos do Início
 
+## Pedidos de 23/11/2026
+- ⬜ 🎨 Temas: mostrar os temas como cartões de prévia que dá para **arrastar** para o lado (deslizar) e escolher tocando
+- ⬜ 🎨 Temas: botão **Personalizar** (escolher as próprias cores: fundo, cartões, destaque, texto) e salvar como tema
+- ⬜ Sessão: mover o **Resumo da sessão** para o topo, logo abaixo da data
+
 ## Ideias para depois
 - ⏳ Área do paciente (fichas preenchidas entre sessões)
 - ⏳ Transcrição de gravações já feitas (sem ser ao vivo)
